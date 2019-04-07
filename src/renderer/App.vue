@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <Button type="primary">123</Button>
+    <TestPage/>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+  import TestPage from './components/TestPage'
+  
   export default {
-    name: 'moneydb'
+    name: 'moneydb',
+    components: {TestPage}
   }
 </script>
 
