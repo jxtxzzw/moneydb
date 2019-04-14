@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
-    <TestPage/>
-    <router-view></router-view>
-  </div>
+<!--  <div id="app">-->
+    <MainLayout/>
+<!--    <router-view></router-view>-->
+<!--  </div>-->
 </template>
 
 <script>
-  import TestPage from './components/TestPage'
+  import MainLayout from './components/MainLayout'
   
   export default {
     name: 'moneydb',
-    components: {TestPage}
+    components: {MainLayout}
   }
 </script>
 
