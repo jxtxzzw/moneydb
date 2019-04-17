@@ -42,18 +42,22 @@
                 <Icon type="md-person"/>
                 个人经历
               </template>
-              <MenuItem name="profile">
-                个人信息
+              <router-link to="/">
+              <MenuItem name="homepage">
+                  主页
               </MenuItem>
+              </router-link>
             </Submenu>
-            <Submenu name="111">
+            <Submenu name="moneyd">
               <template slot="title">
                 <Icon type="md-school"/>
                 记账
               </template>
-              <MenuItem name="money">
-                333
-              </MenuItem>
+              <router-link to="/MockFilterTable">
+                <MenuItem name="money">
+                  MockFilterTable
+                </MenuItem>
+              </router-link>
             </Submenu>
             <Submenu name="management">
               <template slot="title">
@@ -98,9 +102,7 @@
         </Sider>
         <Layout style="padding: 24px 24px 24px;">
           <Content style="{margin: 20px; background: #fff; minHeight: 260px;}">
-            <TestPage>
-            
-            </TestPage>
+            <router-view></router-view>
           </Content>
         </Layout>
       </Layout>

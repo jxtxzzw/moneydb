@@ -11,6 +11,11 @@ export default new Router({
       component: require('@/components/LandingPage').default
     },
     {
+      path: '/MockFilterTable',
+      name: 'MockFilterTable',
+      component: require('@/components/MockFilterTable').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
