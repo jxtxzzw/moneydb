@@ -98,7 +98,9 @@
         </Sider>
         <Layout style="padding: 24px 24px 24px;">
           <Content style="{margin: 20px; background: #fff; minHeight: 260px;}">
-          
+            <TestPage>
+            
+            </TestPage>
           </Content>
         </Layout>
       </Layout>
@@ -106,8 +108,10 @@
   </div>
 </template>
 <script>
+  import TestPage from './TestPage'
   export default {
     name: 'MainLayout',
+    components: {TestPage},
     data () {
       return {
       }
