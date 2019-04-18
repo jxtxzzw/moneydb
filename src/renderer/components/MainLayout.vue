@@ -64,9 +64,11 @@
                 <Icon type="md-school"/>
                 信息管理
               </template>
-              <MenuItem name="22222">
-                钱包管理
-              </MenuItem>
+              <router-link to="/Accounts">
+                <MenuItem name="22222">
+                  钱包管理
+                </MenuItem>
+              </router-link>
               <MenuItem name="33333">
                 aaaaa
               </MenuItem>
@@ -102,7 +104,7 @@
         </Sider>
         <Layout style="padding: 24px 24px 24px;">
           <Content style="{margin: 20px; background: #fff; minHeight: 260px;}">
-            <router-view></router-view>
+            <router-view/>
           </Content>
         </Layout>
       </Layout>
