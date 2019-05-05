@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Expenditure></Expenditure>
+    <BookKeeping></BookKeeping>
   </div>
 </template>
 
 <script>
-  import Expenditure from './Expenditure'
+  import BookKeeping from './BookKeeping'
   export default {
     name: 'TestPage',
-    components: {Expenditure}
+    components: {BookKeeping}
   }
 </script>
 
