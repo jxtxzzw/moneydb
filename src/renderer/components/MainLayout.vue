@@ -43,9 +43,14 @@
                 个人经历
               </template>
               <router-link to="/">
-              <MenuItem name="homepage">
-                  主页
-              </MenuItem>
+                <MenuItem name="homepage">
+                    主页
+                </MenuItem>
+              </router-link>
+              <router-link to="/TestPage">
+                <MenuItem name="testpage">
+                  TestPage
+                </MenuItem>
               </router-link>
             </Submenu>
             <Submenu name="moneyd">
