@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
     "iview": "^3.3.3",
     "pug": "^2.0.3",
     "vue": "^2.5.16",
