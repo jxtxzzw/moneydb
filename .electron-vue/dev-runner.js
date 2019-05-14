@@ -72,7 +72,6 @@ function startRenderer () {
         }
       }
     )
-
     server.listen(9080)
   })
 }
@@ -127,7 +126,7 @@ function startElectron () {
   }
 
   electronProcess = spawn(electron, args)
-  
+
   electronProcess.stdout.on('data', data => {
     electronLog(data, 'blue')
   })

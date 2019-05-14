@@ -16,7 +16,8 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "server": "cd src/server && node index"
   },
   "build": {
     "productName": "moneydb",
@@ -55,10 +56,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
+    "express": "^4.16.4",
     "iview": "^3.3.3",
-    "pug": "^2.0.3",
+    "mysql": "^2.17.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0",
     "vuex-electron": "^1.0.0"
