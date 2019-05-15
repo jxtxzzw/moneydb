@@ -47,6 +47,11 @@
                     主页
                 </MenuItem>
               </router-link>
+              <router-link to="/Login">
+                <MenuItem name="Login">
+                  Login
+                </MenuItem>
+              </router-link>
               <router-link to="/TestPage">
                 <MenuItem name="testpage">
                   TestPage

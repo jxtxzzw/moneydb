@@ -34,12 +34,15 @@ app.use(session({
 }))
 
 
-app.get('/profile', function (req, res) {
+app.post('/profile', function (req, res) {
   if(req.session.login){
     res.send("hello world")
   }else{
-    res.sendStatus(403)
+    // res.sendStatus(403)
+    res.send(req.body)
+    console.log(req.body) // 是 body
   }
+
 })
 
 

@@ -36,6 +36,11 @@ export default new Router({
       component: require('@/components/SensitiveTest').default
     },
     {
+      path: '/Login',
+      name: 'Login',
+      component: require('@/components/Login').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
