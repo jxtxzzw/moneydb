@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const bodyParser = require('body-parser')
 const express = require('express')
+const session = require('express-session')
 const app = express()
 
 app.use(function (req, res, next) {
@@ -23,6 +24,24 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 // 后端api路由
 app.use('/api/user', userApi)
+
+//使用express-session下发session
+app.set('trust proxy', 1)
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
+
+app.get('/profile', function (req, res) {
+  if(req.session.login){
+    res.send("hello world")
+  }else{
+    res.sendStatus(403)
+  }
+})
+
 
 // 监听端口
 app.listen(3000)

@@ -58,9 +58,9 @@
                 <Icon type="md-school"/>
                 记账
               </template>
-              <router-link to="/MockFilterTable">
+              <router-link to="/Profile">
                 <MenuItem name="money">
-                  MockFilterTable
+                  Profile
                 </MenuItem>
               </router-link>
             </Submenu>

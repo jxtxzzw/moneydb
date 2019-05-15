@@ -25,7 +25,16 @@ export default new Router({
       name: 'TestPage',
       component: require('@/components/TestPage').default
     },
-
+    {
+      path: '/Profile',
+      name: 'Profile',
+      component: require('@/components/Profile').default
+    },
+    {
+      path: '/sensitive',
+      name: 'sensitive',
+      component: require('@/components/SensitiveTest').default
+    },
     {
       path: '*',
       redirect: '/'
