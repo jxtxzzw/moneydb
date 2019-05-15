@@ -38,11 +38,15 @@ app.post('/profile', function (req, res) {
   if(req.session.login){
     res.send("hello world")
   }else{
-    // res.sendStatus(403)
-    res.send(req.body)
-    console.log(req.body) // 是 body
+    res.sendStatus(403)
+    // res.send(req.body)
+    // console.log(req.body) // 是 body
   }
 
+})
+
+app.post('/sensitive', function (req, res) {
+  res.sendStatus(403)
 })
 
 
