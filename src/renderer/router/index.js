@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -46,3 +47,13 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'login' && to.name !== 'index') {
+    console.log('router.beforeEach()')
+    store.dispatch('Profile/checkMe')
+  }
+  next()
+})
+
+export default router
