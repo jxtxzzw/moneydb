@@ -48,10 +48,10 @@ const router = new Router({
   ]
 })
 
+// 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'login' && to.name !== 'index') {
-    console.log('router.beforeEach()')
-    store.dispatch('Profile/checkMe')
+  if (to.name !== 'Login' && to.name !== 'index') {
+    store.dispatch('Auth/check')
   }
   next()
 })

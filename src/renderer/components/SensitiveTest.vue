@@ -21,7 +21,7 @@
     methods: {
       // 请求敏感接口
       async getTest () {
-        this.result = await this.$http.post('http://127.0.0.1:3000/sensitive', {name: '11'}).then(res => res)
+        this.result = await this.$http.get('http://127.0.0.1:3000/auth').then(res => res)
       }
     }
   }

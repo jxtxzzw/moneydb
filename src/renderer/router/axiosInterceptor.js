@@ -5,10 +5,10 @@ const axiosInterceptor = axios.create()
 // 拦截器
 axiosInterceptor.interceptors.response.use(
   function (response) {
+    // 如果拦截到的请求是成功的，直接让请求通过
     return response
   }, function (error) {
-    console.log('error in interceptor')
-    // 敏感接口.如果没有session跳转登录界面
+    // 敏感接口，如果没有授权就跳转登录界面
     if (error.response.status === 403) {
       router.push({name: 'Login'})
     }

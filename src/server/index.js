@@ -1,12 +1,9 @@
-// node 后端服务器
-
-// const userApi = require('./api/userApi')
-const fs = require('fs')
-const path = require('path')
-const bodyParser = require('body-parser')
 const express = require('express')
-const session = require('express-session')
 const app = express()
+const session = require('express-session')
+const bodyParser = require('body-parser')
+
+const Auth = require('./api/Auth')
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:9080')
@@ -22,10 +19,6 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-// 后端api路由
-// app.use('/api/user', userApi)
-
-//使用express-session下发session
 app.set('trust proxy', 1)
 app.use(session({
   secret: 'keyboard cat',
@@ -33,9 +26,11 @@ app.use(session({
   saveUninitialized: true
 }))
 
+// app.use('/api/user', userApi)
+app.use('/auth', Auth)
 
 app.post('/profile', function (req, res) {
-  if(req.session.login){
+  if(req.session.loginStatus){
     res.send("hello world")
   }else{
     res.sendStatus(403)
@@ -50,6 +45,5 @@ app.post('/sensitive', function (req, res) {
 })
 
 
-// 监听端口
 app.listen(3000)
-console.log('success listen at port:3000......')
+console.log('success listen at port: 3000......')
