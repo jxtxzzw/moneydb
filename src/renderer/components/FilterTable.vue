@@ -61,7 +61,7 @@
                 }
               }, this.createOptionsRender(index, h))
             }
-          } else {
+          } else if (this.columns[index].filter.type && this.columns[index].filter.type === 'Input') {
             render = (h) => {
               let inputValue = {}
               return h(this.columns[index].filter.type, {
@@ -85,6 +85,8 @@
                 }
               })
             }
+          } else {
+            render = this.columns[index].filter.render
           }
         }
         this.$set(filter, 'render', render)

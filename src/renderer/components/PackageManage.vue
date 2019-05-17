@@ -1,8 +1,10 @@
 <template>
+  <div>
   <filter-table @on-search="onSearch"
                 :data="users"
                 :columns="tableColumns">
   </filter-table>
+  </div>
 </template>
 
 <script>
@@ -95,34 +97,54 @@
           {
             title: '操作',
             key: 'action',
+            filter: {
+              type: 'Render',
+              render: (h) => {
+                return h('router-link', {
+                  props: {
+                    to: '/PackageModify/0'
+                  }
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'success',
+                      long: ''
+                    }
+                  }, '新建')
+                ])
+              }
+            },
             render: (h, params) => {
               return h('div', [
-                h('Button', {
+                h('router-link', {
                   props: {
-                    type: 'primary'
-                  },
-                  style: {
-                    margin: '5px 5px 5px 5px'
-                  },
-                  on: {
-                    click: function () {
-                      console.log(params.row.package_id)
-                    }
+                    to: `/PackageModify/${params.row.package_id}`
                   }
-                }, '修改'),
-                h('Button', {
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'primary'
+                    },
+                    style: {
+                      margin: '5px 5px 5px 5px'
+                    }
+                  }, '修改')
+                ]),
+                h('router-link', {
                   props: {
-                    type: 'error'
-                  },
-                  style: {
-                    margin: '5px 5px 5px 5px'
-                  },
-                  on: {
-                    click: function () {
-                      console.log(params.row.package_id)
-                    }
+                    to: `/Package/${params.row.package_id}`
+                    // onclick直接发消息到后台吧，不要再开一个页面了
                   }
-                }, '删除')
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'error'
+                    },
+                    style: {
+                      margin: '5px 5px 5px 5px'
+                    }
+                  }, '删除')
+                ])
               ])
             }
           }
@@ -165,6 +187,7 @@
     },
     mounted () {
       this.rawData = this.users
+      // 请求数据
     }
   }
 </script>

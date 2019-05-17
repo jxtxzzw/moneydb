@@ -42,6 +42,11 @@ const router = new Router({
       component: require('@/components/Login').default
     },
     {
+      path: '/PackageModify/:id',
+      name: 'PackageModify',
+      component: require('@/components/PackageModify').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import BookKeeping from './BookKeeping'
+  import BookKeeping from './ManageMain'
   import { API_URL } from '../../data/config'
   import PackageManage from './PackageManage'
 
