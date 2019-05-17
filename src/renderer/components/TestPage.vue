@@ -1,21 +1,17 @@
 <template>
   <div>
-    <h1>{{ msg }}</h1>
-    <form>
-      <input type="text" name="username" v-model="userName"> <br>
-      <input type="text" name="age" v-model="age"> <br>
-      <a href="javascript:;" @click="addUser">提交</a>
-    </form>
+    <PackageManage/>
   </div>
 </template>
 
 <script>
   import BookKeeping from './BookKeeping'
   import { API_URL } from '../../data/config'
+  import PackageManage from './PackageManage'
 
   export default {
     name: 'TestPage',
-    components: {BookKeeping},
+    components: {PackageManage, BookKeeping},
     data () {
       return {
         msg: 'jxtxzzw',

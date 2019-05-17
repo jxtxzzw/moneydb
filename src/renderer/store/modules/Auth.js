@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import router from '../../router'
-import { API_URL } from "../../../data/config"
+import { API_URL } from '../../../data/config'
 
 export default {
   name: 'Auth',
@@ -9,7 +9,7 @@ export default {
     loginStatus: false
   },
   mutations: {
-    changeLoginStatus(state, {result}) {
+    changeLoginStatus (state, {result}) {
       state.login = result
     }
   },
