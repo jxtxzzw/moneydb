@@ -1,14 +1,26 @@
 <template>
   <div>
-  <filter-table @on-search="onSearch"
-                :data="users"
-                :columns="tableColumns">
-  </filter-table>
+    <filter-table @on-search="onSearch"
+                  :data="users"
+                  :columns="tableColumns" />
+    <div style="margin: 10px; overflow: hidden">
+      <div style="float: right">
+        <Page :total="rawData.length"
+              :current="1"
+              @on-change="changePage"
+              show-total
+              show-sizer
+              :page-size="pageSize"
+              :page-size-opts="sizer"
+              @on-page-size-change="changePageSize"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import FilterTable from './FilterTable'
+  
   const packageStatus = {
     0: {
       value: 0,
@@ -35,11 +47,15 @@
       color: 'orange'
     }
   }
+  
   export default {
     name: 'PackageManage',
     components: {FilterTable},
     data () {
       return {
+        sizer: [1, 5, 10],
+        pageNumber: 1,
+        pageSize: 10,
         users: [],
         rawData: [],
         tableColumns: [
@@ -183,11 +199,28 @@
           }
         }
         this.users = newUser
+        // 然后发到后台
+      },
+      changePage (pageNumber) {
+        this.pageNumber = pageNumber
+        this.generatePagedTableData()
+      },
+      changePageSize (pageSize) {
+        this.pageSize = pageSize
+        this.pageNumber = 1
+        this.generatePagedTableData()
+      },
+      generatePagedTableData () {
+        const from = (this.pageNumber - 1) * this.pageSize
+        const to = this.pageNumber * this.pageSize - 1
+        this.rawData = this.requestData(from, to)
+      },
+      requestData (from, to) {
+        console.log('axios')
       }
     },
     mounted () {
-      this.rawData = this.users
-      // 请求数据
+      this.generatePagedTableData()
     }
   }
 </script>
