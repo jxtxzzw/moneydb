@@ -29,14 +29,12 @@
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo">
-          
           </div>
-          
         </Menu>
       </Header>
       <Layout >
         <Sider hide-trigger style="background: #fff;">
-          <Menu accordion active-name="1-2" theme="light" width="auto" :open-names="['1']" @on-select="changeMenu">
+          <Menu accordion active-name="1-2" theme="light" width="auto" :open-names="['1']">
             <Submenu name="info">
               <template slot="title">
                 <Icon type="md-person"/>
@@ -122,7 +120,7 @@
   </div>
 </template>
 <script>
-  import TestPage from './TestPage'
+  import TestPage from '../components/TestPage'
   export default {
     name: 'MainLayout',
     components: {TestPage},

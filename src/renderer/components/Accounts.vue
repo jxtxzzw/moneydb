@@ -1,8 +1,10 @@
 <template>
   <div>
-    <Cards v-for="card in accounts" :name="card.name" :balance="card.balance" :identifier="card.identifier" balance-type="元">
-    
-    </Cards>
+    <Cards v-for="card in accounts"
+           :name="card.name"
+           :balance="card.balance"
+           :identifier="card.identifier"
+           balance-type="元"/>
   </div>
 </template>
 

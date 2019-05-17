@@ -1,11 +1,11 @@
 <template>
   <div>
     <filter-table @on-search="onSearch"
-                  :data="users"
+                  :data="staff"
                   :columns="tableColumns" />
     <div style="margin: 10px; overflow: hidden">
       <div style="float: right">
-        <Page :total="rawData.length"
+        <Page :total="staff == null ? 0 : staff.length"
               :current="1"
               @on-change="changePage"
               show-total
@@ -19,49 +19,55 @@
 </template>
 
 <script>
-  import FilterTable from './FilterTable'
+  import FilterTable from '../components/FilterTable'
   
-  const packageStatus = {
+  const staffStatus = {
     0: {
       value: 0,
       name: '全部'
     },
     1: {
       value: 1,
-      name: '已锁定',
+      name: '营业',
       color: 'red'
     },
     2: {
       value: 2,
-      name: '已送达',
+      name: '派件',
       color: 'green'
     },
     3: {
       value: 3,
-      name: '运输中',
+      name: '运输',
       color: 'blue'
     },
     4: {
       value: 4,
-      name: '派件中',
+      name: '管理',
       color: 'orange'
     }
   }
   
   export default {
-    name: 'PackageManage',
+    name: 'StaffManage',
     components: {FilterTable},
     data () {
       return {
         sizer: [1, 5, 10],
         pageNumber: 1,
         pageSize: 10,
-        users: [],
-        rawData: [],
+        staff: [],
         tableColumns: [
           {
-            title: '包裹ID',
-            key: 'package_id',
+            title: '员工工号',
+            key: 'staff_id',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '姓名',
+            key: 'name',
             filter: {
               type: 'Input'
             }
@@ -74,40 +80,33 @@
             }
           },
           {
-            title: '始发地',
-            key: 'from',
+            title: '出生年月',
+            key: 'birthday',
             filter: {
               type: 'Input'
             }
           },
           {
-            title: '目的地',
-            key: 'to',
+            title: '月薪',
+            key: 'salary',
             filter: {
               type: 'Input'
             }
           },
           {
-            title: '物流信息',
-            key: 'info',
-            filter: {
-              type: 'Input'
-            }
-          },
-          {
-            title: '状态',
+            title: '类型',
             key: 'status',
             filter: {
               type: 'Select',
-              option: packageStatus
+              option: staffStatus
             },
             render: (h, params) => {
               return h('Tag', {
                 slot: 'context',
                 props: {
-                  color: this.formatStatus(params.row.status, packageStatus).color
+                  color: this.formatStatus(params.row.status, staffStatus).color
                 }
-              }, this.formatStatus(params.row.status, packageStatus).name)
+              }, this.formatStatus(params.row.status, staffStatus).name)
             }
           },
           {
@@ -118,7 +117,7 @@
               render: (h) => {
                 return h('router-link', {
                   props: {
-                    to: '/PackageModify/0'
+                    to: '/StaffModify/0'
                   }
                 }, [
                   h('Button', {
@@ -134,7 +133,7 @@
               return h('div', [
                 h('router-link', {
                   props: {
-                    to: `/PackageModify/${params.row.package_id}`
+                    to: `/StaffModify/${params.row.package_id}`
                   }
                 }, [
                   h('Button', {
@@ -148,7 +147,7 @@
                 ]),
                 h('router-link', {
                   props: {
-                    to: `/Package/${params.row.package_id}`
+                    to: `/StaffModify/${params.row.package_id}`
                     // onclick直接发消息到后台吧，不要再开一个页面了
                   }
                 }, [
@@ -168,21 +167,21 @@
       }
     },
     created () {
-      this.users = [
+      this.staff = [
         {
-          package_id: '小明',
+          staff_id: '1',
+          name: '小明',
           phone: '17760172601',
-          from: '1023007219@qq.com',
-          to: '50',
-          info: '111',
+          birthday: '1023007219@qq.com',
+          salary: '50',
           status: '1'
         }, {
-          package_id: '小明',
-          phone: '18860172601',
-          from: '1023007219@qq.com',
-          to: '50',
-          info: '111',
-          status: '2'
+          staff_id: '1',
+          name: '小明',
+          phone: '17760172601',
+          birthday: '1023007219@qq.com',
+          salary: '50',
+          status: '1'
         }
       ]
     },
@@ -193,12 +192,12 @@
       onSearch (search) {
         console.log(search)
         let newUser = []
-        for (const u of this.users) {
+        for (const u of this.staff) {
           if (u.phone.includes(search.phone)) {
             newUser.push(u)
           }
         }
-        this.users = newUser
+        this.staff = newUser
         // 然后发到后台
       },
       changePage (pageNumber) {
@@ -213,7 +212,7 @@
       generatePagedTableData () {
         const from = (this.pageNumber - 1) * this.pageSize
         const to = this.pageNumber * this.pageSize - 1
-        this.rawData = this.requestData(from, to)
+        this.staff = this.requestData(from, to)
       },
       requestData (from, to) {
         console.log('axios')

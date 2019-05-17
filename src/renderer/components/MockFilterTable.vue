@@ -29,7 +29,7 @@
     components: {FilterTable},
     data () {
       return {
-        users: [],
+        staff: [],
         tableColumns: [
           {
             title: '用户名',

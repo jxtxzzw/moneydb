@@ -9,7 +9,7 @@
   </Tabs>
 </template>
 <script>
-  import Expenditure from './Expenditure'
+  import Expenditure from '../components/Expenditure'
   export default {
     name: 'BookKeeping',
     components: {Expenditure}

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import MainLayout from './components/MainLayout'
+  import MainLayout from './view/MainLayout'
   
   export default {
     name: 'moneydb',

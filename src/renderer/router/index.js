@@ -44,7 +44,7 @@ const router = new Router({
     {
       path: '/PackageModify/:id',
       name: 'PackageModify',
-      component: require('@/components/PackageModify').default
+      component: require('@/view/PackageModify').default
     },
     {
       path: '*',
