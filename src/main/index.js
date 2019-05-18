@@ -3,6 +3,15 @@
 import { app, BrowserWindow } from 'electron'
 
 /**
+ * In case if you enabled createSharedMutations() plugin you need to create an instance of store in the main process.
+ * To do it just add this line into your main process (for example src/main.js):
+ * import './path/to/your/store'
+ * https://github.com/vue-electron/vuex-electron#installation
+ * Noted by jxtxzzw on 2019-05-18
+ */
+import '../renderer/store'
+
+/**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
