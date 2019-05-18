@@ -1,7 +1,7 @@
 <template>
   <Form ref="loginForm" :model="loginForm" :rules="loginValidator">
-    <FormItem prop="user">
-      <Input type="text" v-model="loginForm.user" placeholder="用户名">
+    <FormItem prop="username">
+      <Input type="text" v-model="loginForm.username" placeholder="用户名">
         <Icon type="ios-person-outline" slot="prepend"></Icon>
       </Input>
     </FormItem>
@@ -21,11 +21,11 @@
     data () {
       return {
         loginForm: {
-          user: '',
+          username: '',
           password: ''
         },
         loginValidator: {
-          user: [
+          username: [
             { required: true, message: '请输入您的用户名', trigger: 'blur' }
           ],
           password: [
@@ -40,18 +40,20 @@
         this.$refs[name].validate((valid) => {
           if (valid) {
             const params = {
-              user: this.user,
-              password: this.password
-              // 注意今后需要加入 MD5 加密后传输
+              privilege: 'Login',
+              username: this.loginForm.username,
+              password: this.loginForm.password
             }
-            this.$http.post('http://127.0.0.1:3000/profile', params)
+            this.$http.post('http://127.0.0.1:3000/auth', params)
               .then(res => {
-                console.log(res.data) // 是data
-                console.log(res.status)
-                this.$Message.success('假装登录成功')
+                if (res && res.status === 200) {
+                  this.$Message.success('假装登录成功')
+                  this.$router.push('/PackageManage')
+                } else {
+                  this.$Message.error('假装登录失败')
+                }
               })
               .catch(function (response) {
-                console.log(response)
               })
           } else {
             this.$Message.error('请检查您的用户名和密码是否都填写完整！')
