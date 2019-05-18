@@ -5,7 +5,7 @@
                   :columns="tableColumns" />
     <div style="margin: 10px; overflow: hidden">
       <div style="float: right">
-        <Page :total="staff == null ? 0 : staff.length"
+        <Page tal="staff == null ? 0 : staff.length"
               :current="1"
               @on-change="changePage"
               show-total
@@ -123,7 +123,8 @@
                   h('Button', {
                     props: {
                       type: 'success',
-                      long: ''
+                      long: true,
+                      disabled: false
                     }
                   }, '新建')
                 ])

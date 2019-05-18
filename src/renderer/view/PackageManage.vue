@@ -20,6 +20,7 @@
 
 <script>
   import FilterTable from '../components/FilterTable'
+  import TableExpandRow from '../components/TableExpandRow'
   
   const packageStatus = {
     0: {
@@ -50,7 +51,7 @@
   
   export default {
     name: 'PackageManage',
-    components: {FilterTable},
+    components: {FilterTable, TableExpandRow},
     data () {
       return {
         sizer: [1, 5, 10],
@@ -58,6 +59,7 @@
         pageSize: 10,
         rawData: [1, 2, 3],
         users: [],
+        lackingAuth: false,
         tableColumns: [
           {
             title: '包裹ID',
@@ -88,10 +90,18 @@
             }
           },
           {
+            type: 'expand',
             title: '物流信息',
             key: 'info',
             filter: {
               type: 'Input'
+            },
+            render: (h, params) => {
+              return h(TableExpandRow, {
+                props: {
+                  row: params.row
+                }
+              })
             }
           },
           {
@@ -124,7 +134,8 @@
                   h('Button', {
                     props: {
                       type: 'success',
-                      long: ''
+                      long: true,
+                      disabled: this.lackingAuth
                     }
                   }, '新建')
                 ])
@@ -139,7 +150,8 @@
                 }, [
                   h('Button', {
                     props: {
-                      type: 'primary'
+                      type: 'primary',
+                      disabled: this.lackingAuth
                     },
                     style: {
                       margin: '5px 5px 5px 5px'
@@ -154,7 +166,8 @@
                 }, [
                   h('Button', {
                     props: {
-                      type: 'error'
+                      type: 'error',
+                      disabled: this.lackingAuth
                     },
                     style: {
                       margin: '5px 5px 5px 5px'

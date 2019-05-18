@@ -38,75 +38,58 @@
             <Submenu name="info">
               <template slot="title">
                 <Icon type="md-person"/>
-                个人经历
+                用户查询
               </template>
-              <router-link to="/">
-                <MenuItem name="homepage">
-                    主页
+              <router-link to="/PackageQuery">
+                <MenuItem name="PackageQuery">
+                  包裹查询
                 </MenuItem>
               </router-link>
-              <router-link to="/Login">
-                <MenuItem name="Login">
-                  Login
+                <MenuItem name="Login" to="/Login">
+                  登录
                 </MenuItem>
-              </router-link>
               <router-link to="/TestPage">
-                <MenuItem name="testpage">
-                  TestPage
+                <MenuItem name="TestPage">
+                  测试
                 </MenuItem>
               </router-link>
             </Submenu>
-            <Submenu name="moneyd">
+            <Submenu name="Logistics">
               <template slot="title">
                 <Icon type="md-school"/>
-                记账
+                物流管理
               </template>
-              <router-link to="/Profile">
-                <MenuItem name="money">
-                  Profile
+              <router-link to="/LogisticsInfoAdd">
+                <MenuItem name="LogisticsInfoAdd">
+                  运输状态录入
+                </MenuItem>
+              </router-link>
+              <router-link to="/DispachInfoAdd">
+                <MenuItem name="DispachInfoAdd">
+                  派件状态录入
                 </MenuItem>
               </router-link>
             </Submenu>
-            <Submenu name="management">
+            <Submenu name="Management">
               <template slot="title">
                 <Icon type="md-school"/>
                 信息管理
               </template>
-              <router-link to="/Accounts">
-                <MenuItem name="22222">
-                  钱包管理
+              <router-link to="/StaffManage">
+                <MenuItem name="StaffManage">
+                  员工
                 </MenuItem>
               </router-link>
-              <MenuItem name="33333">
-                aaaaa
-              </MenuItem>
-            </Submenu>
-            <Submenu name="analysis">
-              <template slot="title">
-                <Icon type="md-school"/>
-                数据分析
-              </template>
-              <MenuItem name="22222">
-                消费组成
-              </MenuItem>
-              <MenuItem name="33333">
-                消费趋势
-              </MenuItem>
-            </Submenu>
-            <Submenu name="system">
-              <template slot="title">
-                <Icon type="md-school"/>
-                系统设置
-              </template>
-              <MenuItem name="22222">
-                偏好设置
-              </MenuItem>
-              <MenuItem name="22222">
-                导入导出
-              </MenuItem>
-              <MenuItem name="33333">
-                清空
-              </MenuItem>
+              <router-link to="/PackageManage">
+                <MenuItem name="PackageManage">
+                  包裹
+                </MenuItem>
+              </router-link>
+              <router-link to="/WarehouseManage">
+                <MenuItem name="WarehouseManage">
+                  仓库
+                </MenuItem>
+              </router-link>
             </Submenu>
           </Menu>
         </Sider>

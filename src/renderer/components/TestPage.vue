@@ -1,19 +1,18 @@
 <template>
   <div>
-    <PackageManage/>
-    <StaffManage/>
+    <Package/>
   </div>
 </template>
 
 <script>
   import BookKeeping from '../view/ManageMain'
   import { API_URL } from '../../data/config'
-  import PackageManage from '../view/PackageManage'
+  import Package from './Package'
   import StaffManage from '../view/StaffManage'
 
   export default {
     name: 'TestPage',
-    components: {StaffManage, PackageManage, BookKeeping},
+    components: {StaffManage, Package, BookKeeping},
     data () {
       return {
         msg: 'jxtxzzw',

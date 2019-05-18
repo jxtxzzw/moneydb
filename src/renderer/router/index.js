@@ -47,6 +47,16 @@ const router = new Router({
       component: require('@/view/PackageModify').default
     },
     {
+      path: '/PackageManage',
+      name: 'PackageManage',
+      component: require('@/view/PackageManage').default
+    },
+    {
+      path: '/StaffManage',
+      name: 'StaffManage',
+      component: require('@/view/StaffManage').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
