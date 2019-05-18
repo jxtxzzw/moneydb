@@ -1,26 +1,33 @@
-import Vue from 'vue'
-import router from '../../router'
-import { API_URL } from '../../../data/config'
+// import Vue from 'vue'
+// import router from '../../router'
+// import { API_URL } from '../../../data/config'
 
 export default {
-  name: 'Auth',
-  namespaced: true,
   state: {
-    loginStatus: false
+    isLogin: false
   },
   mutations: {
     changeLoginStatus (state, {result}) {
-      state.login = result
+      state.isLogin = result
+    },
+    setLoginStatus (state, isLogin) {
+      state.isLogin = isLogin
     }
   },
   actions: {
     async check ({commit}) {
-      const result = await Vue.prototype.$http.get(API_URL + '/auth').then(data => data.data)
-      if (!result) {
-        router.push({name: 'loginStatus'})
-        return
-      }
-      commit('changeLoginStatus', {result})
+      // const result = await Vue.prototype.$http.get(API_URL + '/auth').then(data => data.data)
+      // if (!result) {
+      //   router.push({name: 'isLogin'})
+      //   return
+      // }
+      // commit('changeLoginStatus', {result})
+    },
+    logout ({commit}) {
+      commit('setLoginStatus', false)
+    },
+    login ({commit}) {
+      commit('setLoginStatus', true)
     }
   }
 }

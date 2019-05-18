@@ -30,7 +30,7 @@ app.use(session({
 app.use('/auth', Auth)
 
 app.post('/profile', function (req, res) {
-  if(req.session.loginStatus){
+  if(req.session.isLogin){
     res.send("hello world")
   }else{
     res.sendStatus(403)
