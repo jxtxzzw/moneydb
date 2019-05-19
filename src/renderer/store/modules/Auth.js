@@ -15,14 +15,14 @@ export default {
     }
   },
   actions: {
-    async check ({commit}) {
-      // const result = await Vue.prototype.$http.get(API_URL + '/auth').then(data => data.data)
-      // if (!result) {
-      //   router.push({name: 'isLogin'})
-      //   return
-      // }
-      // commit('changeLoginStatus', {result})
-    },
+    // async check ({commit}) {
+    //   const result = await Vue.prototype.$http.get(API_URL + '/auth').then(data => data.data)
+    //   if (!result) {
+    //     router.push({name: '/PackageManage'})
+    //     return
+    //   }
+    //   commit('changeLoginStatus', {result})
+    // },
     logout ({commit}) {
       commit('setLoginStatus', false)
     },

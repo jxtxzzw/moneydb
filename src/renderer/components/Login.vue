@@ -16,7 +16,7 @@
           </Input>
         </FormItem>
         <FormItem prop="password">
-          <Input type="password" v-model="loginForm.password" placeholder="密码">
+          <Input type="password" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLoginSubmit('loginForm')">
             <Icon type="ios-lock-outline" slot="prepend"></Icon>
           </Input>
         </FormItem>
@@ -43,7 +43,7 @@
           ],
           password: [
             { required: true, message: '请输入您的密码', trigger: 'blur' },
-            { type: 'string', min: 6, message: '密码的最小长度是 6', trigger: 'blur' }
+            { type: 'string', min: 1, message: '密码的最小长度是 6', trigger: 'blur' }
           ]
         }
       }
