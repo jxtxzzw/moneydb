@@ -34,4 +34,21 @@ router.post('/addUser', (req, res) => {
   })
 })
 
+router.post('/login', (req, res) => {
+  const sql = $sql.user.login
+  const params = req.body
+  conn.query(sql, [params.username, params.password], function(err, result) {
+    if (err) {
+      console.log(err)
+    }
+    if (result && result.length > 0) {
+      console.log(result)
+      jsonWrite(res, result)
+    } else {
+      console.log(result)
+      res.sendStatus(403)
+    }
+  })
+})
+
 module.exports = router

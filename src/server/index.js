@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const bodyParser = require('body-parser')
-
 const Auth = require('./api/Auth')
+const userApi = require('./api/userApi')
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:9080')
@@ -26,7 +26,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-// app.use('/api/user', userApi)
+app.use('/api/user', userApi)
 app.use('/auth', Auth)
 
 app.post('/profile', function (req, res) {
