@@ -1,18 +1,18 @@
 export default {
   state: {
-    isLogin: false
+    token: ''
   },
   mutations: {
-    setLoginStatus (state, isLogin) {
-      state.isLogin = isLogin
+    setToken (state, token) {
+      state.token = token
     }
   },
   actions: {
-    logout ({commit}) {
-      commit('setLoginStatus', false)
+    login ({commit}, token) {
+      commit('setToken', token)
     },
-    login ({commit}) {
-      commit('setLoginStatus', true)
+    logout ({commit}) {
+      commit('setToken', '')
     }
   }
 }

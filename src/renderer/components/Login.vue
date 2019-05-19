@@ -1,7 +1,8 @@
 <template>
   <div>
     <Card>
-      <div v-if="loginStatus">
+      {{isLogin}}
+      <div v-if="isLogin">
         <Alert type="success">
           欢迎你，工号XXXX，您已经处于登录状态。
         </Alert>
@@ -60,11 +61,12 @@
               username: this.loginForm.username,
               password: this.loginForm.password
             }
-            this.$http.post('http://127.0.0.1:3000/auth', params)
+            this.$http.post('http://127.0.0.1:3000/login', params)
               .then(res => {
                 if (res && res.status === 200) {
                   this.$Message.success('假装登录成功')
-                  this.$store.dispatch('login')
+                  console.log(res.data.token)
+                  this.$store.dispatch('login', res.data.token)
                 } else {
                   this.$Message.error('假装登录失败')
                 }
@@ -77,12 +79,13 @@
         })
       },
       logout () {
+        console.log(this.$store.state.Auth.token)
         this.$store.dispatch('logout')
       }
     },
     computed: {
-      loginStatus () {
-        return this.$store.state.Auth.isLogin
+      isLogin () {
+        return this.$store.state.Auth.token !== ''
       }
     }
   }
