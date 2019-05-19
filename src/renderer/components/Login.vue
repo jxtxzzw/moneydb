@@ -1,32 +1,35 @@
 <template>
   <div>
-    <div v-if="loginStatus">
-      <Alert type="success">
-        欢迎你，工号XXXX，您已经处于登录状态。
-      </Alert>
-      <Button @click="logout()">
-        注销
-      </Button>
-    </div>
-    <div v-else>
-      <Form ref="loginForm" :model="loginForm" :rules="loginValidator">
-        <FormItem prop="username">
-          <Input type="text" v-model="loginForm.username" placeholder="用户名">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <FormItem prop="password">
-          <Input type="password" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLoginSubmit('loginForm')">
-            <Icon type="ios-lock-outline" slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleLoginSubmit('loginForm')">登录</Button>
-        </FormItem>
-      </Form>
-    </div>
+    <Card>
+      <div v-if="loginStatus">
+        <Alert type="success">
+          欢迎你，工号XXXX，您已经处于登录状态。
+        </Alert>
+        <p>其他信息</p>
+        <p>诸如修改密码</p>
+        <Button @click="logout()">
+          注销
+        </Button>
+      </div>
+      <div v-else>
+        <Form ref="loginForm" :model="loginForm" :rules="loginValidator">
+          <FormItem prop="username">
+            <Input type="text" v-model="loginForm.username" placeholder="用户名">
+              <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem prop="password">
+            <Input type="password" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLoginSubmit('loginForm')">
+              <Icon type="ios-lock-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="handleLoginSubmit('loginForm')">登录</Button>
+          </FormItem>
+        </Form>
+      </div>
+    </Card>
   </div>
-  
 </template>
 <script>
   export default {

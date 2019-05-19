@@ -16,12 +16,6 @@
     top: 15px;
     left: 20px;
   }
-  .layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    margin-right: 20px;
-  }
-
 </style>
 <template>
   <div class="layout">
@@ -40,63 +34,52 @@
                 <Icon type="md-person"/>
                 用户查询
               </template>
-              <router-link to="/PackageQuery">
-                <MenuItem name="PackageQuery">
+                <MenuItem name="PackageQuery" to="/PackageQuery">
                   包裹查询
                 </MenuItem>
-              </router-link>
                 <MenuItem name="Login" to="/Login">
-                  登录
+                  <span v-if="this.$store.state.Auth.isLogin">
+                    个人信息
+                  </span>
+                  <span v-else>
+                    登录
+                  </span>
                 </MenuItem>
-              <router-link to="/TestPage">
-                <MenuItem name="TestPage">
+                <MenuItem name="TestPage" to="/TestPage">
                   测试
                 </MenuItem>
-              </router-link>
             </Submenu>
             <Submenu name="Logistics">
               <template slot="title">
                 <Icon type="md-school"/>
                 物流管理
               </template>
-              <router-link to="/LogisticsInfoAdd">
-                <MenuItem name="LogisticsInfoAdd">
+                <MenuItem name="LogisticsInfoAdd" to="/LogisticsInfoAdd">
                   运输状态录入
                 </MenuItem>
-              </router-link>
-              <router-link to="/DispachInfoAdd">
-                <MenuItem name="DispachInfoAdd">
+                <MenuItem name="DispachInfoAdd" to="/DispachInfoAdd">
                   派件状态录入
                 </MenuItem>
-              </router-link>
             </Submenu>
             <Submenu name="Management">
               <template slot="title">
                 <Icon type="md-school"/>
                 信息管理
               </template>
-              <router-link to="/StaffManage">
-                <MenuItem name="StaffManage">
+                <MenuItem name="StaffManage" to="/StaffManage">
                   员工
                 </MenuItem>
-              </router-link>
-              <router-link to="/PackageManage">
-                <MenuItem name="PackageManage">
+                <MenuItem name="PackageManage"  to="/PackageManage">
                   包裹
                 </MenuItem>
-              </router-link>
-              <router-link to="/WarehouseManage">
-                <MenuItem name="WarehouseManage">
+                <MenuItem name="WarehouseManage" to="/WarehouseManage">
                   仓库
                 </MenuItem>
-              </router-link>
             </Submenu>
           </Menu>
         </Sider>
         <Layout style="padding: 24px 24px 24px;">
-          <Content style="{margin: 20px; background: #fff; minHeight: 260px;}">
             <router-view/>
-          </Content>
         </Layout>
       </Layout>
     </Layout>
