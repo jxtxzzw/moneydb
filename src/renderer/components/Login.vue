@@ -4,10 +4,13 @@
       {{isLogin}}
       <div v-if="isLogin">
         <Alert type="success">
-          欢迎你，工号XXXX，您已经处于登录状态。
+          欢迎你，工号 {{this.$store.state.Auth.user_id}}，您已经处于登录状态。
         </Alert>
         <p>其他信息</p>
         <p>诸如修改密码</p>
+        <Button>
+          查看
+        </Button>
         <Button @click="logout()">
           注销
         </Button>
