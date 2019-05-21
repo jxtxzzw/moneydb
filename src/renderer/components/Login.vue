@@ -36,6 +36,7 @@
   </div>
 </template>
 <script>
+  import {md5, MD5_SUFFIX} from '../../server/router/constant'
   export default {
     name: 'Login',
     data () {
@@ -62,28 +63,37 @@
             const params = {
               privilege: 'Login',
               username: this.loginForm.username,
-              password: this.loginForm.password
+              password: md5(MD5_SUFFIX + this.loginForm.password)
             }
-            this.$http.post('http://127.0.0.1:3000/login', params)
+            this.$http.post('http://127.0.0.1:3000/User/Login', params)
               .then(res => {
                 if (res && res.status === 200) {
-                  this.$Message.success('假装登录成功')
-                  console.log(res.data.token)
+                  const success = res.data.success
+                  this.loginInteract(success)
                   this.$store.dispatch('login', res.data.token)
                 } else {
-                  this.$Message.error('假装登录失败')
+                  this.$Message.error('意料之外的错误！请于管理员联系！')
                 }
               })
               .catch(function (response) {
+                alert('意料之外的错误！请于管理员联系！')
+                console.log(response)
               })
-          } else {
-            this.$Message.error('请检查您的用户名和密码是否都填写完整！')
           }
         })
       },
       logout () {
-        console.log(this.$store.state.Auth.token)
         this.$store.dispatch('logout')
+      },
+      loginInteract (success) {
+        if (success) {
+          this.$Message.success('登录成功')
+        } else {
+          this.$Modal.error({
+            title: '登录失败',
+            content: '请检查您的用户名和密码'
+          })
+        }
       }
     },
     computed: {

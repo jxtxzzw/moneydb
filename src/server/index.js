@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 // const Auth = require('./api/Auth')
 // const userApi = require('./api/userApi')
 // const router  = require('./router')
+const User = require('./api/User')
 const db = require('./database/connection')
 
 app.use(function (req, res, next) {
@@ -27,7 +28,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-
+app.use('/User', User)
 
 app.listen(3000)
 console.log('success listen at port: 3000......')

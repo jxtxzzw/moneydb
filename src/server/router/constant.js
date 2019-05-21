@@ -1,10 +1,10 @@
 const crypto = require('crypto')
 
 module.exports = {
-  MD5_SUFFIX: 'luffyZhou我是一个固定长度的盐值',
+  MD5_SUFFIX: 'jxtxzzw_passwordSuffix_HU74REIY98FBWIUEB',
   md5: (pwd) => {
     let md5 = crypto.createHash('md5')
     return md5.update(pwd).digest('hex')
   },
-  secretKey: 'luffy_1993711_26_jwttoken'
+  secretKey: 'jxtxzzw_secretKey_019UEDJ3AKS6DIRG)'
 }
