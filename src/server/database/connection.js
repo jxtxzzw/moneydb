@@ -3,17 +3,22 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize('db_learn', 'jxtxzzw_dev', 'jxtxzzw_dev', {
   host: 'www.jxtxzzw.com',
   dialect: 'mariadb',
-  dialectOptions: {connectTimeout: 1000} // mariadb connector option
+  // dialectOptions: {connectTimeout: 1000} // mariadb connector option
 })
 
-const User = sequelize.import('./model/User')
+const Groups = sequelize.import('./models/Groups')
+
+const Users = sequelize.import('./models/Users')
 
 sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.')
     console.log(sequelize.isDefined('User'))
-    User.sync({force: true})
+    Users.drop()
+    Groups.drop()
+    Groups.sync({force: true})
+    Users.sync({force: true})
     console.log('Sync() succeed.')
   })
   .catch(err => {
