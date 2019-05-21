@@ -84,7 +84,7 @@
       logout () {
         this.$store.dispatch('logout')
       },
-      loginInteract (success, content='请检查用户名和密码是否正确！') {
+      loginInteract (success, content = '请检查用户名和密码是否正确！') {
         if (success) {
           this.$Message.success('登录成功')
         } else {

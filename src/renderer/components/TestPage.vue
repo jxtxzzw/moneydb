@@ -1,15 +1,15 @@
 <template>
   <div>
-    <Login/>
+    <Group/>
   </div>
 </template>
 
 <script>
-  import Login from './Login'
+  import Group from './Group'
 
   export default {
     name: 'TestPage',
-    components: {Login},
+    components: {Group},
     data () {
       return {
         msg: 'jxtxzzw'
