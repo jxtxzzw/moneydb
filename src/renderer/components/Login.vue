@@ -65,19 +65,18 @@
               username: this.loginForm.username,
               password: md5(MD5_SUFFIX + this.loginForm.password)
             }
+            const _this = this
             this.$http.post('http://127.0.0.1:3000/User/Login', params)
               .then(res => {
                 if (res && res.status === 200) {
-                  const success = res.data.success
-                  this.loginInteract(success)
+                  this.loginInteract(res.data.success)
                   this.$store.dispatch('login', res.data.token)
                 } else {
-                  this.$Message.error('意料之外的错误！请于管理员联系！')
+                  this.loginInteract(false, '出现了意料之外的错误，请联系管理员！')
                 }
               })
               .catch(function (response) {
-                alert('意料之外的错误！请于管理员联系！')
-                console.log(response)
+                _this.loginInteract(false, response)
               })
           }
         })
@@ -85,13 +84,13 @@
       logout () {
         this.$store.dispatch('logout')
       },
-      loginInteract (success) {
+      loginInteract (success, content='请检查用户名和密码是否正确！') {
         if (success) {
           this.$Message.success('登录成功')
         } else {
           this.$Modal.error({
-            title: '登录失败',
-            content: '请检查您的用户名和密码'
+            title: '登录失败！',
+            content: content
           })
         }
       }
