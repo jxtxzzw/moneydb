@@ -47,26 +47,8 @@
 <script>
   export default {
     name: 'Group',
-    data () {
-      return {
-        formItem: {
-          dept_id: '',
-          dept_name: '',
-          UserPrivilege: [],
-          WarehousePrivilege: [],
-          PackagePrivilege: [],
-          PackagePrivilegeShow: []
-        }
-      }
-    },
     methods: {
       postRequest () {
-      },
-      PackagePrivilegeValidate () {
-      },
-      WarehousePrivilegeValidate () {
-      },
-      UserPrivilegeValidate () {
       }
     }
   }
