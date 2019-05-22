@@ -2,12 +2,9 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const bodyParser = require('body-parser')
-// const Auth = require('./api/Auth')
-// const userApi = require('./api/userApi')
-// const router  = require('./router')
 const User = require('./api/User')
 const db = require('./database/connection')
-
+const Package = require('./api/Package')
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:9080')
   res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT')
@@ -29,6 +26,6 @@ app.use(session({
   saveUninitialized: true
 }))
 app.use('/User', User)
-
+app.use('/Package', Package)
 app.listen(3000)
 console.log('success listen at port: 3000......')

@@ -1,7 +1,7 @@
 <template>
   <div>
     <filter-table @on-search="onSearch"
-                  :data="users"
+                  :data="rawData"
                   :columns="tableColumns" />
     <div style="margin: 10px; overflow: hidden">
       <div style="float: right">
@@ -23,29 +23,20 @@
   import TableExpandRow from '../components/TableExpandRow'
   
   const packageStatus = {
-    0: {
-      value: 0,
-      name: '全部'
-    },
-    1: {
-      value: 1,
-      name: '已锁定',
+    '运输中': {
+      value: '运输中',
+      name: '运输中',
       color: 'red'
     },
-    2: {
-      value: 2,
-      name: '已送达',
-      color: 'green'
-    },
-    3: {
-      value: 3,
-      name: '运输中',
+    '派件中': {
+      value: '派件中',
+      name: '派件中',
       color: 'blue'
     },
-    4: {
-      value: 4,
-      name: '派件中',
-      color: 'orange'
+    '已签收': {
+      value: '已签收',
+      name: '已签收',
+      color: 'green'
     }
   }
   
@@ -54,11 +45,10 @@
     components: {FilterTable, TableExpandRow},
     data () {
       return {
+        rawData: [],
         sizer: [1, 5, 10],
         pageNumber: 1,
         pageSize: 10,
-        rawData: [1, 2, 3],
-        users: [],
         lackingAuth: false,
         tableColumns: [
           {
@@ -69,25 +59,68 @@
             }
           },
           {
-            title: '手机号',
-            key: 'phone',
+            title: '寄件人姓名',
+            key: 'sender_name',
             filter: {
               type: 'Input'
             }
           },
           {
-            title: '始发地',
-            key: 'from',
+            title: '寄件人联系电话',
+            key: 'sender_phone',
             filter: {
               type: 'Input'
             }
           },
           {
-            title: '目的地',
-            key: 'to',
+            title: '寄件人所在城市',
+            key: 'sender_city',
             filter: {
               type: 'Input'
             }
+          },
+          {
+            title: '寄件人地址',
+            key: 'sender_address',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '寄件时间',
+            key: 'send_date'
+          },
+          {
+            title: '收件人姓名',
+            key: 'receiver_name',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '收件人联系电话',
+            key: 'receiver_phone',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '收件人所在城市',
+            key: 'receiver_city',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '收件人地址',
+            key: 'receiver_address',
+            filter: {
+              type: 'Input'
+            }
+          },
+          {
+            title: '收件时间',
+            key: 'receive_date'
           },
           {
             type: 'expand',
@@ -180,39 +213,12 @@
         ]
       }
     },
-    created () {
-      this.users = [
-        {
-          package_id: '小明',
-          phone: '17760172601',
-          from: '1023007219@qq.com',
-          to: '50',
-          info: '111',
-          status: '1'
-        }, {
-          package_id: '小明',
-          phone: '18860172601',
-          from: '1023007219@qq.com',
-          to: '50',
-          info: '111',
-          status: '2'
-        }
-      ]
-    },
     methods: {
       formatStatus (value, status) {
         return status[value] || {value: '', name: ''}
       },
       onSearch (search) {
-        console.log(search)
-        let newUser = []
-        for (const u of this.staff) {
-          if (u.phone.includes(search.phone)) {
-            newUser.push(u)
-          }
-        }
-        this.users = newUser
-        // 然后发到后台
+        this.generatePagedTableData(search)
       },
       changePage (pageNumber) {
         this.pageNumber = pageNumber
@@ -223,13 +229,20 @@
         this.pageNumber = 1
         this.generatePagedTableData()
       },
-      generatePagedTableData () {
+      generatePagedTableData (params = null) {
         const from = (this.pageNumber - 1) * this.pageSize
         const to = this.pageNumber * this.pageSize - 1
-        this.rawData = this.requestData(from, to)
+        this.requestData(from, to, params)
       },
-      requestData (from, to) {
-        console.log('axios')
+      async requestData (from, to, params) {
+        this.rawData = []
+        await this.$http.post('http://127.0.0.1:3000/Package/Query', params)
+          .then(response => {
+            to = to < response.data.length ? to : response.data.length - 1
+            for (let i = from; i <= to; i++) {
+              this.rawData.push(response.data[i])
+            }
+          })
       }
     },
     mounted () {

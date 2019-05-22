@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Groups = sequelize.import('./Groups')
-  const Users = sequelize.define("Users", {
+  const Departments = sequelize.import('./Departments')
+  const Members = sequelize.define("Members", {
     uuid: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -28,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   })
-  Users.belongsTo(Groups, {foreignKey: 'group_id', onDelete: 'CASCADE'})
-  return Users
+  Members.belongsTo(Departments, {foreignKey: 'dept_id', onDelete: 'CASCADE'})
+  return Members
 }

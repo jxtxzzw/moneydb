@@ -46,7 +46,8 @@
             render = (h) => {
               return h(this.columns[index].filter.type, {
                 props: {
-                  value: 0
+                  value: 0,
+                  clearable: true
                 },
                 on: {
                   'on-change': (val) => {

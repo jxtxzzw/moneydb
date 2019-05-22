@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Groups = sequelize.define("Groups", {
-    group_id: {
+  const Departments = sequelize.define("Departments", {
+    dept_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -70,5 +70,5 @@ module.exports = (sequelize, DataTypes) => {
       default: false
     }
   })
-  return Groups
+  return Departments
 }
