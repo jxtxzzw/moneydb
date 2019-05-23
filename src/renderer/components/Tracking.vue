@@ -1,13 +1,82 @@
 <template>
-  <Steps :current="1" status="error">
-    <Step title="已揽件" content="这里是该步骤的描述信息"></Step>
-    <Step title="运输中" content="这里是该步骤的描述信息"></Step>
-    <Step title="派件中" content="这里是该步骤的描述信息"></Step>
-    <Step title="已签收" content="这里是该步骤的描述信息"></Step>
-  </Steps>
+  <div>
+    <div v-if="packageStatus === 'NOT FOUND'">
+      <Alert type="error" show-icon>
+        没有找到物流信息
+        <span slot="desc">
+          请您检查是否输入了正确的运单号
+          <Button>
+            重新输入（把这个功能添加过来，默认值是用户已经输入的，允许直接修改个别数字）
+          </Button>
+        </span>
+      </Alert>
+    </div>
+    <Card v-else>
+      <Steps :current="currentStep">
+        <Step title="已揽件" content="您的快递已经揽收，即将开始运输"></Step>
+        <Step title="运输中" content="正在运输中"></Step>
+        <Step title="派件中" content="派件中，请保持电话畅通"></Step>
+        <Step title="已签收" content="感谢您的使用"></Step>
+      </Steps>
+    </Card>
+    <Card v-if="packageStatus !== 'NOT FOUND'">
+      <Timeline>
+        <TimelineItem v-for="item of rawData.tracking">
+          <p class="time">
+            {{formDate(item.date)}}
+          </p>
+          <p class="content">
+            {{item.log}}
+          </p>
+        </TimelineItem>
+      </Timeline>
+    </Card>
+  </div>
 </template>
 <script>
   export default {
-
+    name: 'Tracking',
+    data () {
+      return {
+        packageStatus: '',
+        rawData: [],
+        currentStep: 0,
+        currentStatus: ''
+      }
+    },
+    async mounted () {
+      const packageID = this.$route.params.package_id
+      await this.$http.post('http://127.0.0.1:3000/Package/Tracking', {
+        package_id: packageID
+      })
+        .then(response => {
+          this.packageStatus = response.data.status
+          if (this.packageStatus === 'NOT FOUND') {
+            // nothing?
+          } else {
+            if (this.packageStatus === '已揽件') {
+              this.currentStep = 0
+            } else if (this.packageStatus === '运输中') {
+              this.currentStep = 1
+            } else if (this.packageStatus === '派件中') {
+              this.currentStep = 2
+            } else {
+              this.currentStep = 3
+            }
+            if (this.currentStep === 3) {
+              this.currentStatus = 'finish'
+            } else {
+              this.currentStatus = 'process'
+            }
+            this.rawData = response.data.tracking
+          }
+        })
+    },
+    methods: {
+      formDate (date) {
+        const v = date.toString().split('T')[0].split('-')
+        return v[0] + '年' + v[1] + '月' + v[2] + '日'
+      }
+    }
   }
 </script>

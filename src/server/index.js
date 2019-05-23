@@ -5,7 +5,6 @@ const bodyParser = require('body-parser')
 const User = require('./api/User')
 const db = require('./database/connection')
 const Package = require('./api/Package')
-const Test = require('./api/Test')
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:9080')
   res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT')
@@ -20,7 +19,6 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 // app.use('/', router)
-app.use('/',Test)
 app.set('trust proxy', 1)
 app.use(session({
   secret: 'keyboard cat',

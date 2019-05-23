@@ -4,14 +4,14 @@ const orm = require('./utils').orm()
 //
 // const Members = orm.import('./models/Members')
 
-const Tests = orm.import('./models/Tests')
+const Trackings = orm.import('./models/Trackings')
 
 
 orm
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.')
-    // Tests.sync({force: true})
+    // Trackings.sync({force: true})
     // console.log(orm.isDefined('User'))
     // Users.drop()
     // Groups.drop()

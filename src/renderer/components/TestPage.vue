@@ -1,20 +1,15 @@
 <template>
   <div>
-    <Group/>
+    <Tracking/>
   </div>
 </template>
 
 <script>
-  import Group from './Group'
+  import Tracking from './Tracking'
 
   export default {
     name: 'TestPage',
-    components: {Group},
-    data () {
-      return {
-        msg: 'jxtxzzw'
-      }
-    }
+    components: {Tracking}
   }
 </script>
 

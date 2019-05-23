@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   })
-  Members.belongsTo(Departments, {foreignKey: 'dept_id', onDelete: 'CASCADE'})
+  Members.belongsTo(Departments, {
+    foreignKey: 'dept_id',
+    onDelete: 'CASCADE'
+  })
   return Members
 }
