@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
   const Packages = sequelize.import('./Packages')
-  const Trackings = sequelize.define("Trackings", {
+  const Trackings = sequelize.define('Trackings', {
     log: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     date: {
       type: DataTypes.DATE,

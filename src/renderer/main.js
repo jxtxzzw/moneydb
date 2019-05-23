@@ -7,6 +7,7 @@ import store from './store'
 
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+
 Vue.use(iView)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
@@ -15,7 +16,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  components: { App },
+  components: {App},
   router,
   store,
   template: '<App/>'

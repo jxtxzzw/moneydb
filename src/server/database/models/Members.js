@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Departments = sequelize.import('./Departments')
-  const Members = sequelize.define("Members", {
+  const Members = sequelize.define('Members', {
     uuid: {
       type: DataTypes.STRING,
       primaryKey: true,

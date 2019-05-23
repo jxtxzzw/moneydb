@@ -4,8 +4,7 @@ const orm = require('./utils').orm()
 //
 // const Members = orm.import('./models/Members')
 
-const Trackings = orm.import('./models/Trackings')
-
+// const Trackings = orm.import('./models/Trackings')
 
 orm
   .authenticate()
@@ -17,12 +16,8 @@ orm
     // Groups.drop()
     // Groups.sync({force: true})
     // Users.sync({force: true})
-
     console.log('Sync() succeed.')
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err)
   })
-
-
-

@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-  import {md5, MD5_SUFFIX} from '../../server/router/constant'
+  import {md5, MD5_SUFFIX} from '../../server/router/salt'
   export default {
     name: 'Login',
     data () {

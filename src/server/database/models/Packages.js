@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define("Packages", {
+  return sequelize.define('Packages', {
     package_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     sender_name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     sender_phone: {
       type: DataTypes.STRING,
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     receiver_address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     receive_date: {
       type: DataTypes.DATE,

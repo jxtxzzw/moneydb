@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router()
+
 const orm = require('../database/utils').orm()
-const jwt           = require('express-jwt')
-const { secretKey } = require('../router/constant');
+
+const jwt = require('express-jwt')
+const {secretKey} = require('../router/salt')
+
 const Packages = orm.import('../database/models/Packages')
+
 router.post('/Package/Query', jwt({secret: secretKey}), (request, response) => {
   const payload = request.body
   console.log(request.user.uuid)
@@ -11,8 +15,8 @@ router.post('/Package/Query', jwt({secret: secretKey}), (request, response) => {
   // 过期用插件自带的就好，不要自己做了
   Packages.findAll(payload)
     .then(project => {
-    response.json(project)
-  })
+      response.json(project)
+    })
 })
 
 const Trackings = orm.import('../database/models/Trackings')
