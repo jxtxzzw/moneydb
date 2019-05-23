@@ -23,6 +23,11 @@
   import TableExpandRow from '../components/TableExpandRow'
   
   const packageStatus = {
+    '已揽件': {
+      value: '已揽件',
+      name: '已揽件',
+      color: 'yellow'
+    },
     '运输中': {
       value: '运输中',
       name: '运输中',
@@ -56,6 +61,21 @@
             key: 'package_id',
             filter: {
               type: 'Input'
+            }
+          },
+          {
+            title: '寄件人详细信息',
+            key: 'sender_detail',
+            type: 'expand',
+            filter: {
+              type: 'Input'
+            },
+            render: (h, params) => {
+              return h(TableExpandRow, {
+                props: {
+                  a: 'a'
+                }
+              })
             }
           },
           {
@@ -229,23 +249,22 @@
         this.pageNumber = 1
         this.generatePagedTableData()
       },
-      generatePagedTableData (params = null) {
-        const from = (this.pageNumber - 1) * this.pageSize
-        const to = this.pageNumber * this.pageSize - 1
-        this.requestData(from, to, params)
+      async generatePagedTableData (params = null) {
+        const payload = {
+          where: params,
+          offset: (this.pageNumber - 1) * this.pageSize,
+          limit: this.pageSize
+        }
+        this.requestData(payload)
       },
-      async requestData (from, to, params) {
-        this.rawData = []
-        await this.$http.post('http://127.0.0.1:3000/Package/Query', params)
+      async requestData (payload) {
+        await this.$http.post('http://127.0.0.1:3000/Package/Query', payload)
           .then(response => {
-            to = to < response.data.length ? to : response.data.length - 1
-            for (let i = from; i <= to; i++) {
-              this.rawData.push(response.data[i])
-            }
+            this.rawData = response.data
           })
       }
     },
-    mounted () {
+    async mounted () {
       this.generatePagedTableData()
     }
   }
