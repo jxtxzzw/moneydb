@@ -64,16 +64,16 @@ const router = new Router({
 
 // 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach(async (to, from, next) => {
-  // if (to.name !== 'Login' && to.name !== 'landing-page') {
-  //   Vue.http.post('http://127.0.0.1:3000/auth', {
-  //     username: '1',
-  //     password: '1',
-  //     from: from.name,
-  //     to: to.name,
-  //     privilege: 'Login'
-  //   })
-  //   // .then() 如果是 403 就会被拦截器重定向，所以这里如果能收到 res 就一定是被拦截器通过了，所以直接next
-  // }
+  if (to.name !== 'Login' && to.name !== 'landing-page') {
+    Vue.http.post('http://127.0.0.1:3000/auth', {
+      username: '1',
+      password: '1',
+      from: from.name,
+      to: to.name,
+      privilege: 'Login'
+    })
+    // .then() 如果是 403 就会被拦截器重定向，所以这里如果能收到 res 就一定是被拦截器通过了，所以直接next
+  }
   next()
 })
 

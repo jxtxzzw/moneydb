@@ -5,13 +5,14 @@ const Members = orm.import('../database/models/Members')
 const jwt = require("jsonwebtoken")
 const { secretKey } = require('../router/constant')
 
-router.post('/Login', (request, response) => {
+router.post('/User/Login', (request, response) => {
   const params = request.body
   Members.findOne({
     where: {
       email: params.username,
       password: params.password
-    }
+    },
+    attributes: ['uuid']
   }).then(project => {
     if (project == null) {
       response.json({
@@ -23,7 +24,7 @@ router.post('/Login', (request, response) => {
         project.get(),
         secretKey,
         {
-          expiresIn: 60
+          expiresIn: 600
         }
       )
       response.json({

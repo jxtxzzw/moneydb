@@ -1,10 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const orm = require('../database/utils').orm()
-
+const jwt           = require('express-jwt')
+const { secretKey } = require('../router/constant');
 const Packages = orm.import('../database/models/Packages')
-router.post('/Query', (request, response) => {
+router.post('/Package/Query', jwt({secret: secretKey}), (request, response) => {
   const payload = request.body
+  console.log(request.user.uuid)
+  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
+  // 过期用插件自带的就好，不要自己做了
   Packages.findAll(payload)
     .then(project => {
     response.json(project)
@@ -12,7 +16,7 @@ router.post('/Query', (request, response) => {
 })
 
 const Trackings = orm.import('../database/models/Trackings')
-router.post('/Tracking', (request, response) => {
+router.post('/Package/Tracking', (request, response) => {
   const params = request.body
   Packages.findAll({
     where: params,

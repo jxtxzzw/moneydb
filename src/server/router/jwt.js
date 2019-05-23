@@ -5,7 +5,7 @@ const jwtAuth = expressJwt({
   secret: secretKey,
   credentialsRequired: true // 设置为false就不进行校验了，游客也可以访问
 }).unless({
-  path: ["/login", "/list", '/aa']
+  path: ["/User/Login", "/Package/Tracking", '/aa']
 });
 
 module.exports = jwtAuth;
