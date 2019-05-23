@@ -63,7 +63,7 @@
             const params = {
               privilege: 'Login',
               username: this.loginForm.username,
-              password: md5(MD5_SUFFIX + this.loginForm.password)
+              password: MD5_SUFFIX.OUTER + md5(MD5_SUFFIX.INNER + this.loginForm.password)
             }
             const _this = this
             this.$http.post('http://127.0.0.1:3000/User/Login', params)
