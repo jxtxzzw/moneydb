@@ -21,11 +21,11 @@
     </Card>
     <Card v-if="packageStatus !== 'NOT FOUND'">
       <Timeline>
-        <TimelineItem v-for="item of rawData.tracking">
-          <p class="time">
+        <TimelineItem v-for="item in rawData">
+          <p class="time" :style="{'font-size': '14px', 'font-weight': 'bold'}">
             {{formDate(item.date)}}
           </p>
-          <p class="content">
+          <p class="content" :style="{'padding-left': '5px'}">
             {{item.log}}
           </p>
         </TimelineItem>
@@ -36,6 +36,9 @@
 <script>
   export default {
     name: 'Tracking',
+    props: {
+      package_id: String
+    },
     data () {
       return {
         packageStatus: '',
@@ -45,7 +48,8 @@
       }
     },
     async mounted () {
-      const packageID = this.$route.params.package_id
+      // const packageID = this.$route.params.package_id
+      const packageID = this.package_id
       await this.$http.post('http://127.0.0.1:3000/Package/Tracking', {
         package_id: packageID
       })
@@ -69,6 +73,7 @@
               this.currentStatus = 'process'
             }
             this.rawData = response.data.tracking
+            console.log(this.rawData)
           }
         })
     },

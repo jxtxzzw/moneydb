@@ -64,21 +64,6 @@
             }
           },
           {
-            title: '寄件人详细信息',
-            key: 'sender_detail',
-            type: 'expand',
-            filter: {
-              type: 'Input'
-            },
-            render: (h, params) => {
-              return h(TableExpandRow, {
-                props: {
-                  a: 'a'
-                }
-              })
-            }
-          },
-          {
             title: '寄件人姓名',
             key: 'sender_name',
             filter: {
@@ -152,7 +137,7 @@
             render: (h, params) => {
               return h(TableExpandRow, {
                 props: {
-                  row: params.row
+                  package_id: params.row.package_id.toString()
                 }
               })
             }
