@@ -12,7 +12,7 @@
           <Input :value="formItem.sender_phone" placeholder="请输入寄件人联系电话"/>
         </FormItem>
         <FormItem label="寄件人城市" prop="sender_city">
-          <Cascader :data="formItem.sender_city" change-on-select trigger="hover" filterable />
+          <Cascader :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="寄件人地址" prop="sender_address">
@@ -28,7 +28,7 @@
           <Input :value="formItem.receiver_phone" placeholder="请输入收件人联系电话"/>
         </FormItem>
         <FormItem label="收件人城市" prop="receiver_city">
-          <Cascader :data="formItem.receiver_city" change-on-select trigger="hover" filterable />
+          <Cascader :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="收件人地址" prop="receiver_address">
@@ -101,10 +101,46 @@
             {required: false},
             {validator: descriptionValidator, trigger: 'blur'}
           ]
+        },
+        city: []
+      }
+    },
+    methods: {
+      async loadCascadeCity (item, callback) {
+        item.loading = true
+        await this.getCityData(item.children, item.value)
+        item.loading = false
+        callback()
+      },
+      async getCityData (array, father = null) {
+        await this.$http.post('http://127.0.0.1:3000/Location/Query', {
+          father: father
+        })
+          .then(response => {
+            const data = response.data
+            for (const x of data) {
+              array.push({
+                value: x.location,
+                label: x.location,
+                children: []
+              })
+            }
+          })
+        for (const x of array) {
+          await this.$http.post('http://127.0.0.1:3000/Location/Query', {
+            father: x.value
+          })
+            .then(response => {
+              const data = response.data
+              if (data.length > 0) {
+                x.loading = false
+              }
+            })
         }
       }
     },
-    created () {
+    async mounted () {
+      this.getCityData(this.city)
     },
     computed: {
       getTracking () {
