@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const bodyParser = require('body-parser')
+// const connection = require('./database/connection')
 
 const router = require('./router')
 app.use(function (req, res, next) {
@@ -17,7 +18,6 @@ app.use(function (req, res, next) {
 })
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-
 app.use('/', router)
 app.set('trust proxy', 1)
 app.use(session({
