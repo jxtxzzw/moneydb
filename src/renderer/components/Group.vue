@@ -36,7 +36,7 @@
           </CheckboxGroup>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="postRequest()">提交</Button>
+          <Button type="primary" @click="postRequest">提交</Button>
         </FormItem>
       </Form>
     </Card>
@@ -49,6 +49,7 @@
     name: 'Group',
     methods: {
       postRequest () {
+        console.log(formItem)
       }
     }
   }

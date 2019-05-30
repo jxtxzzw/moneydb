@@ -3,12 +3,12 @@ const router = express.Router()
 
 const orm = require('../database/utils').orm()
 
-const jwt = require('express-jwt')
+const jwt_decode = require('express-jwt')
 const {secretKey} = require('../router/salt')
 
 const Packages = orm.import('../database/models/Packages')
 
-router.post('/Package/Query', jwt({secret: secretKey}), (request, response) => {
+router.post('/Package/Query', jwt_decode({secret: secretKey}), (request, response) => {
   const payload = request.body
   console.log(request.user.uuid)
   // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限

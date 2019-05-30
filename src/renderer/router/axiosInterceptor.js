@@ -1,11 +1,16 @@
 import axios from 'axios'
 import router from './'
+import store from '../store/'
+
 const axiosInterceptor = axios.create()
+// const _this = this
 
 // axios拦截器
 // 拦截请求，给所有的请求都带上token
-axios.interceptors.request.use(request => {
-  const JWTToken = window.localStorage.getItem('JWTToken')
+axiosInterceptor.interceptors.request.use(request => {
+  const token = store.state.Auth.token
+  // const JWTToken = window.localStorage.getItem('jxtxzzw_jwt_token')
+  const JWTToken = token
   if (JWTToken) {
     // 此处有坑，下方记录
     request.headers['Authorization'] = `Bearer ${JWTToken}`
@@ -14,25 +19,31 @@ axios.interceptors.request.use(request => {
 })
 
 // 拦截响应，遇到token不合法则报错
-axios.interceptors.response.use(
+axiosInterceptor.interceptors.response.use(
   response => {
     if (response.data.token) {
       console.log('token:', response.data.token)
-      window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
+      store.dispatch('login', response.data.token)
+      // window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
+    } else {
+      console.log('11111')
     }
     return response
   },
   error => {
     const errRes = error.response
     if (errRes.status === 401) {
-      window.localStorage.removeItem('jxtxzzw_jwt_token')
-      // swal('Auth Error!', `${errRes.data.error.message}, please login!`, 'error')
-        .then(() => {
-          router.push('/Login')
-        })
+      store.dispatch('logout')
+      // window.localStorage.removeItem('jxtxzzw_jwt_token')
+      //   .then(() => {
+      router.push('/Login')
+      // })
+    } else {
+      console.log('else')
     }
     return Promise.reject(error.message) // 返回接口返回的错误信息
-  })
+  }
+)
 
 // 拦截器
 // axiosInterceptor.interceptors.response.use(

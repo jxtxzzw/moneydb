@@ -65,15 +65,39 @@ const router = new Router({
 // 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach(async (to, from, next) => {
   if (to.name !== 'Login' && to.name !== 'landing-page') {
-    Vue.http.post('http://127.0.0.1:3000/auth', {
+    Vue.http.post('http://127.0.0.1:3000/User/Auth', {
       username: '1',
       password: '1',
       from: from.name,
-      to: to.name,
-      privilege: 'Login'
+      to: to.name
     })
-    // .then() 如果是 403 就会被拦截器重定向，所以这里如果能收到 res 就一定是被拦截器通过了，所以直接next
+      .then(
+        response => {
+          if (response.data.token) {
+            console.log('token:', response.data.token)
+            window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
+          } else {
+            console.log('11111')
+          }
+          return response
+        },
+        error => {
+          const errRes = error.response
+          if (errRes.status === 401) {
+            window.localStorage.removeItem('jxtxzzw_jwt_token')
+            router.push('/Login')
+          } else if (errRes.status === 403) {
+            console.log('else')
+            // 跳转到没有权限的页面
+          }
+          return Promise.reject(error.message) // 返回接口返回的错误信息
+        }
+      )
+      .catch(e => {
+        console.log(e)
+      })
   }
+  console.log('确认存活')
   next()
 })
 
