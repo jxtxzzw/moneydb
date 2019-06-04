@@ -19,7 +19,7 @@
           <Input v-model="formData.sender_address" placeholder="请输入寄件人地址"/>
         </FormItem>
         <FormItem label="寄件日期" prop="send_date">
-          <DatePicker v-model="formData.send_date" type="date" placeholder="请选择日期"/>
+          <DatePicker v-model="formData.send_date" type="date" placeholder="请选择日期" :options="sendTimeOption" @on-change="onSendTimeChange"/>
         </FormItem>
         <FormItem label="收件人姓名" prop="receiver_name">
           <Input v-model="formData.receiver_name" placeholder="请输入收件人姓名"/>
@@ -35,7 +35,7 @@
           <Input v-model="formData.receiver_address" placeholder="请输入收件人地址"/>
         </FormItem>
         <FormItem label="收件日期" prop="receive_date">
-          <DatePicker v-model="formData.receive_date" type="date" placeholder="请选择日期"/>
+          <DatePicker v-model="formData.receive_date" type="date" placeholder="请选择日期" :options="receiveTimeOption" @on-change="onReceiveTimeChange"/>
         </FormItem>
         <FormItem label="运费" prop="price">
           <Input v-model="formData.price" placeholder="请输入金额"/>
@@ -85,9 +85,11 @@
           }
         }
       }
-      const descriptionValidator = (rule, value, callback) => {
+      const addressValidator = (rule, value, callback) => {
         if (value.toString().length > 4096) {
           callback(new Error('更新说明不能多于 4096 个字'))
+        } else if (value.toString().length < 10) {
+          callback(new Error('地址不能少于 10 个字'))
         } else {
           callback()
         }
@@ -100,19 +102,50 @@
         }
       }
       return {
+        sendTimeOption: {
+          disabledDate (sendDate) {
+            return sendDate > Date.now()
+          }
+        },
+        receiveTimeOption: {
+          disabledDate (sendDate) {
+            return sendDate > Date.now()
+          }
+        },
         ruleValidation: {
+          sender_name: [
+            {required: true, trigger: 'blur'}
+          ],
+          receiver_name: [
+            {required: true, trigger: 'blur'}
+          ],
+          sender_city: [
+            {required: true, trigger: 'blur'}
+          ],
+          receiver_city: [
+            {required: true, trigger: 'blur'}
+          ],
+          send_date: [
+            {required: true, trigger: 'blur'}
+          ],
           price: [
-            // {required: true, message: '请输入金额', trigger: 'blur'}
+            {required: true, trigger: 'blur'},
             {validator: priceValidator, trigger: 'blur'}
           ],
-          description: [
-            {required: false},
-            {validator: descriptionValidator, trigger: 'blur'}
+          sender_address: [
+            {required: true, trigger: 'blur'},
+            {validator: addressValidator, trigger: 'blur'}
+          ],
+          receiver_address: [
+            {required: true, trigger: 'blur'},
+            {validator: addressValidator, trigger: 'blur'}
           ],
           receiver_phone: [
+            {required: true, trigger: 'blur'},
             {validator: phoneValidator, trigger: 'blur'}
           ],
           sender_phone: [
+            {required: true, trigger: 'blur'},
             {validator: phoneValidator, trigger: 'blur'}
           ]
         },
@@ -169,6 +202,32 @@
               content: error.data
             })
           })
+      },
+      /**
+       * 开始时间发生变化时触发,设置结束时间不可选择的日期
+       * 结束时间应大于等于开始时间,且小于等于当前时间
+       * @param {string} sendDate 格式化后的日期
+       * @param {string} type 当前的日期类型
+       */
+      onSendTimeChange (sendDate, type) {
+        this.receiveTimeOption = {
+          disabledDate (receiveDate) {
+            return receiveDate < new Date(sendDate) || receiveDate > Date.now()
+          }
+        }
+      },
+      /**
+       * 结束时间发生变化时触发,设置开始时间不可选择的日期
+       * 开始时间小于等于结束时间,且小于等于当前时间
+       * @param {string} receiveDate 格式化后的日期
+       * @param {string} type 当前的日期类型
+       */
+      onReceiveTimeChange (receiveDate, type) {
+        this.sendTimeOption = {
+          disabledDate (sendDate) {
+            return sendDate > new Date(receiveDate) || sendDate > Date.now()
+          }
+        }
       }
     },
     async mounted () {
