@@ -1,20 +1,20 @@
 <template>
   <div>
     <Card>
-      <Form ref="formData" :model="formData" :rules="ruleValidation" :label-width="80">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidation" :label-width="80">
         <FormItem label="仓库编号" prop="warehouse_id">
-          <Input v-model="formData.warehouse_id" disabled readonly/>
+          <Input v-model="formItem.warehouse_id" disabled readonly/>
         </FormItem>
         <FormItem label="仓库名称" prop="warehouse_name">
-          <Input v-model="formData.warehouse_name" placeholder="仓库名称"/>
+          <Input v-model="formItem.warehouse_name" placeholder="仓库名称"/>
         </FormItem>
         <FormItem label="仓库负责人" prop="warehouse_manager" placeholder="仓库负责人">
-          <Select v-model="formData.warehouse_manager">
+          <Select v-model="formItem.warehouse_manager" filterable clearable >
             <Option v-for="manager in warehouseManagerList" :value="manager.value" :key="manager.value">{{ manager.value }}</Option>
           </Select>
         </FormItem>
         <FormItem label="仓库所在地" prop="location">
-          <Cascader v-model="formData.location" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
+          <Cascader v-model="formItem.location" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem>
@@ -47,20 +47,19 @@
           ]
         },
         city: [],
-        warehouseManagerList: [],
-        formData: {}
+        warehouseManagerList: []
       }
     },
     methods: {
       async getManagerData () {
-        await this.$http.post('http://127.0.0.1:3000/WareHouse/ManagerList')
+        await this.$http.get('http://127.0.0.1:3000/WareHouse/ManagerList')
           .then(response => {
             if (response) {
               const data = response.data
               for (const x of data) {
                 this.warehouseManagerList.push({
-                  value: x.name,
-                  label: x.name
+                  value: x.manager_id,
+                  label: x.manager_id
                 })
               }
             }
@@ -89,7 +88,6 @@
             }
           })
         for (const x of array) {
-          console.log(x.value)
           await this.getCityData(x.children, x.value)
         }
       },
@@ -99,9 +97,9 @@
         }
       },
       async postRequest () {
-        this.validate(this.formData)
+        this.validate(this.formItem)
         const _this = this
-        await this.$http.post('http://127.0.0.1:3000/WareHouse/Add', this.formData)
+        await this.$http.post('http://127.0.0.1:3000/WareHouse/Add', this.formItem)
           .then(() => {
             _this.$Message.success('操作成功！')
             router.push('/WareHouseManage')
@@ -117,7 +115,6 @@
     async mounted () {
       await this.getCityData(this.city)
       await this.getManagerData()
-      this.formData = this.formItem
     }
   }
 </script>

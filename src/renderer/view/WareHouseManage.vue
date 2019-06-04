@@ -86,7 +86,7 @@
               return h('div', [
                 h('router-link', {
                   props: {
-                    to: `/WareHouseModify/${params.row.package_id}`
+                    to: `/WareHouseModify/${params.row.warehouse_id}`
                   }
                 }, [
                   h('Button', {
@@ -101,7 +101,7 @@
                 ]),
                 h('router-link', {
                   props: {
-                    to: `/Package/${params.row.package_id}`
+                    to: `/Package/${params.row.warehouse_id}`
                     // onclick直接发消息到后台吧，不要再开一个页面了
                   }
                 }, [

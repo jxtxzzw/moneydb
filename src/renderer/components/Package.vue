@@ -222,7 +222,6 @@
     },
     async mounted () {
       await this.getCityData(this.city)
-      console.log(this.city)
     }
   }
 </script>

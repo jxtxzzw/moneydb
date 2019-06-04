@@ -25,6 +25,9 @@ router.use(Package)
 const Location = require('../api/Location')
 router.use(Location)
 
+const WareHouse = require('../api/WareHouse')
+router.use(WareHouse)
+
 // 处理 404
 router.use((request, response, next) => {
   let err = new Error('Not Found')
