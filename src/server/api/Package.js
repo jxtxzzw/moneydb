@@ -26,18 +26,24 @@ router.post('/Package/Query', jwt_decode({
     })
 })
 
+router.post('/Package/Count', jwt_decode({
+  secret: secretKey
+}), (request, response) => {
+  Packages.count().then(count => {
+    response.json({
+      count: count
+    })
+  })
+
+})
+
 router.post('/Package/Add', jwt_decode({
   secret: secretKey
 }), (request, response) => {
 
-  console.log(request.user.uuid)
   const payload = request.body
   payload.sender_city = payload.sender_city.join('/')
   payload.receiver_city = payload.receiver_city.join('/')
-
-
-
-  let returnStatus = 500
   Packages.findOne({
     where: {
       package_id: payload.package_id

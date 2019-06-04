@@ -5,7 +5,7 @@
                   :columns="tableColumns" />
     <div style="margin: 10px; overflow: hidden">
       <div style="float: right">
-        <Page :total="rawData == null ? 0 : rawData.length"
+        <Page :total="total"
               :current="1"
               @on-change="changePage"
               show-total
@@ -50,6 +50,7 @@
     components: {FilterTable, TableExpandRow},
     data () {
       return {
+        total: 0,
         rawData: [],
         sizer: [1, 5, 10],
         pageNumber: 1,
@@ -246,11 +247,18 @@
         await this.$http.post('http://127.0.0.1:3000/Package/Query', payload)
           .then(response => {
             this.rawData = response.data
+            for (const x of this.rawData) {
+              x.sender_city = x.sender_city.join('/')
+              x.receiver_city = x.receiver_city.join('/')
+            }
           })
       }
     },
     async mounted () {
       this.generatePagedTableData()
+      await this.$http.post('http://127.0.0.1:3000/Package/Count').then(response => {
+        this.total = response.data.count
+      })
     }
   }
 </script>

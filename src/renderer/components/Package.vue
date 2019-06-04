@@ -41,7 +41,7 @@
           <Input v-model="formData.price" placeholder="请输入金额"/>
         </FormItem>
         <FormItem label="运费已付" prop="paid">
-          <i-switch size="large" true-value="true" false-value="false" v-model="formData.paid">
+          <i-switch size="large" :true-value="true" :false-value="false" v-model="formData.paid">
             <span slot="open">已付</span>
             <span slot="close">到付</span>
           </i-switch>
@@ -66,6 +66,7 @@
 
 
 <script>
+  import router from '../router'
   export default {
     name: 'Expenditure',
     props: {
@@ -140,11 +141,13 @@
         await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formData)
           .then(() => {
             _this.$Message.success('操作成功！')
-            _this.router.push('/PackageManage')
+            router.push('/PackageManage')
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error)
             _this.$Modal.error({
-              title: '操作失败'
+              title: '操作失败',
+              content: error.data
             })
           })
       }
