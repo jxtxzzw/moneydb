@@ -1,7 +1,7 @@
 <template>
   <div>
     <Package :formItem="formItem"/>
-    <Card>
+    <Card v-if="this.$route.params.id !== '0'">
       <TableExpandRow :package_id="this.$route.params.id"/>
     </Card>
   </div>

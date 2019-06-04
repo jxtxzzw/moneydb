@@ -92,15 +92,28 @@
           callback()
         }
       }
+      const phoneValidator = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('手机号是必填的'))
+        } else if (value.toString().length !== 11) {
+          callback(new Error('请输入正确的手机号'))
+        }
+      }
       return {
         ruleValidation: {
           price: [
-            {required: true, message: '请输入金额', trigger: 'blur'},
+            // {required: true, message: '请输入金额', trigger: 'blur'}
             {validator: priceValidator, trigger: 'blur'}
           ],
           description: [
             {required: false},
             {validator: descriptionValidator, trigger: 'blur'}
+          ],
+          receiver_phone: [
+            {validator: phoneValidator, trigger: 'blur'}
+          ],
+          sender_phone: [
+            {validator: phoneValidator, trigger: 'blur'}
           ]
         },
         city: [],
@@ -136,7 +149,13 @@
           await this.getCityData(x.children, x.value)
         }
       },
+      validate (data) {
+        if (data.receive_date === '') {
+          data.receive_date = null
+        }
+      },
       async postRequest () {
+        this.validate(this.formData)
         const _this = this
         await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formData)
           .then(() => {

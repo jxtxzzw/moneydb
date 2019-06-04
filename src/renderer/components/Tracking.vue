@@ -20,7 +20,7 @@
       </Steps>
     </Card>
     <Card v-if="packageStatus !== 'NOT FOUND'">
-      <Timeline>
+      <Timeline v-if="rawData && rawData.length > 0">
         <TimelineItem v-for="item in rawData">
           <p class="time" :style="{'font-size': '14px', 'font-weight': 'bold'}">
             {{formDate(item.date)}}
@@ -30,6 +30,11 @@
           </p>
         </TimelineItem>
       </Timeline>
+      <Alert v-else type="error" show-icon>
+        <template slot="desc">
+          没有查询到物流信息，可能您的包裹刚被揽收，暂时没有物流信息，请稍后查询。
+        </template>
+      </Alert>
     </Card>
   </div>
 </template>
