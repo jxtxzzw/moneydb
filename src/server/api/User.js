@@ -48,7 +48,7 @@ router.post('/User/Login', (request, response) => {
           project.get(),
           secretKey,
           {
-            expiresIn: 600
+            expiresIn: 86400
           }
         )
         response.json({

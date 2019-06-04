@@ -1,47 +1,47 @@
 <template>
   <div>
     <Card>
-      <Form ref="formItem" :model="formItem" :rules="ruleValidation" :label-width="80">
+      <Form ref="formData" :model="formData" :rules="ruleValidation" :label-width="80">
         <FormItem label="运单号" prop="package_id">
-          <Input :value="formItem.package_id" disabled readonly/>
+          <Input v-model="formData.package_id" disabled readonly/>
         </FormItem>
         <FormItem label="寄件人姓名" prop="sender_name">
-          <Input :value="formItem.sender_name" placeholder="请输入寄件人姓名"/>
+          <Input v-model="formData.sender_name" placeholder="请输入寄件人姓名"/>
         </FormItem>
         <FormItem label="寄件人联系电话" prop="sender_phone">
-          <Input :value="formItem.sender_phone" placeholder="请输入寄件人联系电话"/>
+          <Input v-model="formData.sender_phone" placeholder="请输入寄件人联系电话"/>
         </FormItem>
         <FormItem label="寄件人城市" prop="sender_city">
-          <Cascader :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
+          <Cascader v-model="formData.sender_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="寄件人地址" prop="sender_address">
-          <Input :value="formItem.sender_address" placeholder="请输入寄件人地址"/>
+          <Input v-model="formData.sender_address" placeholder="请输入寄件人地址"/>
         </FormItem>
         <FormItem label="寄件日期" prop="send_date">
-          <DatePicker v-model="formItem.send_date" type="date" placeholder="请选择日期"/>
+          <DatePicker v-model="formData.send_date" type="date" placeholder="请选择日期"/>
         </FormItem>
         <FormItem label="收件人姓名" prop="receiver_name">
-          <Input :value="formItem.receiver_name" placeholder="请输入收件人姓名"/>
+          <Input v-model="formData.receiver_name" placeholder="请输入收件人姓名"/>
         </FormItem>
         <FormItem label="收件人联系电话" prop="receiver_phone">
-          <Input :value="formItem.receiver_phone" placeholder="请输入收件人联系电话"/>
+          <Input v-model="formData.receiver_phone" placeholder="请输入收件人联系电话"/>
         </FormItem>
         <FormItem label="收件人城市" prop="receiver_city">
-          <Cascader :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
+          <Cascader v-model="formData.receiver_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="收件人地址" prop="receiver_address">
-          <Input :value="formItem.receiver_address" placeholder="请输入收件人地址"/>
+          <Input v-model="formData.receiver_address" placeholder="请输入收件人地址"/>
         </FormItem>
         <FormItem label="收件日期" prop="receive_date">
-          <DatePicker v-model="formItem.receive_date" type="date" placeholder="请选择日期"/>
+          <DatePicker v-model="formData.receive_date" type="date" placeholder="请选择日期"/>
         </FormItem>
         <FormItem label="运费" prop="price">
-          <Input v-model="formItem.price" placeholder="请输入金额"/>
+          <Input v-model="formData.price" placeholder="请输入金额"/>
         </FormItem>
         <FormItem label="运费已付" prop="paid">
-          <i-switch size="large" true-value="已付" false-value="到付" :value="formItem.paid">
+          <i-switch size="large" true-value="true" false-value="false" v-model="formData.paid">
             <span slot="open">已付</span>
             <span slot="close">到付</span>
           </i-switch>
@@ -57,7 +57,7 @@
 <!--          <Input v-model="formItem.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="如果有什么想说的……"/>-->
 <!--        </FormItem>-->
         <FormItem>
-          <Button type="primary" @click="postRequest()"> {{formItem.buttonPrompt}}</Button>
+          <Button type="primary" @click="postRequest"> {{formItem.buttonPrompt}}</Button>
         </FormItem>
       </Form>
     </Card>
@@ -102,7 +102,8 @@
             {validator: descriptionValidator, trigger: 'blur'}
           ]
         },
-        city: []
+        city: [],
+        formData: {}
       }
     },
     methods: {
@@ -124,6 +125,7 @@
                 label: x.location,
                 children: []
               })
+              
             }
           })
         for (const x of array) {
@@ -137,10 +139,24 @@
               }
             })
         }
+      },
+      async postRequest () {
+        const _this = this
+        await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formData)
+          .then(() => {
+            _this.$Message.success('操作成功！')
+            _this.router.push('/PackageManage')
+          })
+          .catch(() => {
+            _this.$Modal.error({
+              title: '操作失败'
+            })
+          })
       }
     },
     async mounted () {
-      this.getCityData(this.city)
+      await this.getCityData(this.city)
+      this.formData = this.formItem
     },
     computed: {
       getTracking () {

@@ -32,16 +32,18 @@
     async mounted () {
       console.log(this.$route.params.id)
       if (this.$route.params.id === '0') {
-        console.log('aa')
         await this.$http.post('http://127.0.0.1:3000/Package/Query')
           .then(response => {
-            this.formItem.package_id = response.data.length + 1
+            this.formItem.package_id = (response.data[response.data.length - 1].package_id + 1)
             this.formItem.buttonPrompt = this.showPrompt()
           })
       } else {
         const params = {}
         params.package_id = this.$route.params.id
-        await this.$http.post('http://127.0.0.1:3000/Package/Query', params)
+        const payload = {
+          where: params
+        }
+        await this.$http.post('http://127.0.0.1:3000/Package/Query', payload)
           .then(response => {
             this.formItem = response.data[0]
             this.formItem.buttonPrompt = this.showPrompt()

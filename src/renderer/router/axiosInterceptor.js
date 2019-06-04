@@ -26,7 +26,6 @@ axiosInterceptor.interceptors.response.use(
       store.dispatch('login', response.data.token)
       // window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
     } else {
-      console.log('11111')
     }
     return response
   },

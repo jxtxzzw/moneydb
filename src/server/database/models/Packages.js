@@ -65,10 +65,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     status: {
-      type: DataTypes.ENUM('运输中', '派件中', '已签收'),
+      type: DataTypes.ENUM('已揽件', '运输中', '派件中', '已签收'),
       allowNull: false,
       validate: {
-        isIn: ['运输中', '派件中', '已签收']
+        isIn: ['已揽件', '运输中', '派件中', '已签收']
       }
     }
   })

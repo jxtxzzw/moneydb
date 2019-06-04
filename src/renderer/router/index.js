@@ -77,7 +77,6 @@ router.beforeEach(async (to, from, next) => {
             console.log('token:', response.data.token)
             window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
           } else {
-            console.log('11111')
           }
           return response
         },
@@ -87,7 +86,7 @@ router.beforeEach(async (to, from, next) => {
             window.localStorage.removeItem('jxtxzzw_jwt_token')
             router.push('/Login')
           } else if (errRes.status === 403) {
-            console.log('else')
+            console.log('jump to 403')
             // 跳转到没有权限的页面
           }
           return Promise.reject(error.message) // 返回接口返回的错误信息
@@ -97,7 +96,6 @@ router.beforeEach(async (to, from, next) => {
         console.log(e)
       })
   }
-  console.log('确认存活')
   next()
 })
 
