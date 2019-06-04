@@ -14,12 +14,12 @@ orm
   .then(() => {
     console.log('Connection has been established successfully.')
     // Trackings.sync({force: true})
-    Locations.sync({force: true})
+    // Locations.sync({force: true})
     // console.log(orm.isDefined('User'))
     // Users.drop()
     // Groups.drop()
-    Packages.sync({force: true})
-    WareHouses.sync({force: true})
+    // Packages.sync({force: true})
+    // WareHouses.sync({force: true})
     console.log('Sync() succeed.')
   })
   .catch(err => {

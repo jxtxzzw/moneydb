@@ -16,7 +16,7 @@
     data () {
       return {
         formItem: {
-          package_id: '0',
+          package_id: 0,
           buttonPrompt: '新增'
         }
       }
@@ -34,11 +34,10 @@
       }
     },
     async mounted () {
-      console.log(this.$route.params.id)
       if (this.$route.params.id === '0') {
-        await this.$http.post('http://127.0.0.1:3000/Package/Query')
+        await this.$http.post('http://127.0.0.1:3000/Package/Max')
           .then(response => {
-            this.formItem.package_id = (response.data[response.data.length - 1].package_id + 1)
+            this.formItem.package_id = response.data.max + 1
             this.formItem.buttonPrompt = this.showPrompt()
           })
       } else {

@@ -7,6 +7,25 @@ const utils = {
       dialectOptions: {connectTimeout: 5000} // mariadb connector option
     })
     return sequelize
+  },
+  getCascadedLocation: async function (location) {
+    const orm = require('../database/utils').orm()
+    const Locations = orm.import('../database/models/Locations')
+    const cascadedLocation = []
+    while (location != null) {
+      console.log(location)
+      cascadedLocation.push(location)
+      await Locations.findOne({
+        where: {
+          location: location
+        },
+        attributes: ['father']
+      })
+        .then(project => {
+          location = project.get().father
+        })
+    }
+    return cascadedLocation.reverse()
   }
 }
 

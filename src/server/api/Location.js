@@ -3,14 +3,31 @@ const router = express.Router()
 
 const orm = require('../database/utils').orm()
 
-const Location = orm.import('../database/models/Locations')
+const Locations = orm.import('../database/models/Locations')
+
+// export default async function getCascadedLocation(location) {
+//   const cascadedLocation = []
+//   while (location != null) {
+//     cascadedLocation.push(location)
+//     await Location.findOne({
+//       where: {
+//         location: location
+//       },
+//       attributes: ['father']
+//     })
+//       .then(project => {
+//         location = project.get().father
+//       })
+//   }
+//   return cascadedLocation
+// }
 
 router.post('/Location/Query', (request, response) => {
   const params = request.body
   if (!params.father) {
     params.father = null
   }
-  Location.findAll({
+  Locations.findAll({
     where: params,
     attributes: ['location']
   })

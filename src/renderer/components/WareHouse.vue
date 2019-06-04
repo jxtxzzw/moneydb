@@ -52,7 +52,7 @@
       }
     },
     methods: {
-      async getManagerData() {
+      async getManagerData () {
         await this.$http.post('http://127.0.0.1:3000/WareHouse/ManagerList')
           .then(response => {
             if (response) {
@@ -116,6 +116,7 @@
     },
     async mounted () {
       await this.getCityData(this.city)
+      await this.getManagerData()
       this.formData = this.formItem
     }
   }

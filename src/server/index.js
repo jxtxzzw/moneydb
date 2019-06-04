@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const bodyParser = require('body-parser')
-const connection = require('./database/connection')
+// const connection = require('./database/connection')
 
 const router = require('./router')
 app.use(function (req, res, next) {

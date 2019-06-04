@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Packages', {
+  const Locations = sequelize.import('./Locations')
+  const Packages = sequelize.define('Packages', {
     package_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -15,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [11, 11]
       }
-    },
-    sender_city: {
-      type: DataTypes.STRING,
-      allowNull: false
     },
     sender_address: {
       type: DataTypes.STRING,
@@ -38,10 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [11, 11]
       }
-    },
-    receiver_city: {
-      type: DataTypes.STRING,
-      allowNull: false
     },
     receiver_address: {
       type: DataTypes.STRING,
@@ -72,4 +65,15 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   })
+  Packages.belongsTo(Locations, {
+    foreignKey: 'sender_city',
+    targetKey: 'location',
+    onUpdate: 'CASCADE'
+  })
+  Packages.belongsTo(Locations, {
+    foreignKey: 'receiver_city',
+    targetKey: 'location',
+    onUpdate: 'CASCADE'
+  })
+  return Packages
 }

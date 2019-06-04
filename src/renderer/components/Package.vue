@@ -1,61 +1,51 @@
 <template>
   <div>
     <Card>
-      <Form ref="formData" :model="formData" :rules="ruleValidation" :label-width="80">
+      <Form ref="formItem" :model="formItem" :rules="ruleValidation" :label-width="80">
         <FormItem label="运单号" prop="package_id">
-          <Input v-model="formData.package_id" disabled readonly/>
+          <Input v-model="formItem.package_id" disabled readonly/>
         </FormItem>
         <FormItem label="寄件人姓名" prop="sender_name">
-          <Input v-model="formData.sender_name" placeholder="请输入寄件人姓名"/>
+          <Input v-model="formItem.sender_name" placeholder="请输入寄件人姓名"/>
         </FormItem>
         <FormItem label="寄件人联系电话" prop="sender_phone">
-          <Input v-model="formData.sender_phone" placeholder="请输入寄件人联系电话"/>
+          <Input v-model="formItem.sender_phone" placeholder="请输入寄件人联系电话"/>
         </FormItem>
         <FormItem label="寄件人城市" prop="sender_city">
-          <Cascader v-model="formData.sender_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
+          <Cascader v-model="formItem.sender_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="寄件人地址" prop="sender_address">
-          <Input v-model="formData.sender_address" placeholder="请输入寄件人地址"/>
+          <Input v-model="formItem.sender_address" placeholder="请输入寄件人地址"/>
         </FormItem>
         <FormItem label="寄件日期" prop="send_date">
-          <DatePicker v-model="formData.send_date" type="date" placeholder="请选择日期" :options="sendTimeOption" @on-change="onSendTimeChange"/>
+          <DatePicker v-model="formItem.send_date" type="date" placeholder="请选择日期" :options="sendTimeOption" @on-change="onSendTimeChange"/>
         </FormItem>
         <FormItem label="收件人姓名" prop="receiver_name">
-          <Input v-model="formData.receiver_name" placeholder="请输入收件人姓名"/>
+          <Input v-model="formItem.receiver_name" placeholder="请输入收件人姓名"/>
         </FormItem>
         <FormItem label="收件人联系电话" prop="receiver_phone">
-          <Input v-model="formData.receiver_phone" placeholder="请输入收件人联系电话"/>
+          <Input v-model="formItem.receiver_phone" placeholder="请输入收件人联系电话"/>
         </FormItem>
         <FormItem label="收件人城市" prop="receiver_city">
-          <Cascader v-model="formData.receiver_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
+          <Cascader v-model="formItem.receiver_city" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem label="收件人地址" prop="receiver_address">
-          <Input v-model="formData.receiver_address" placeholder="请输入收件人地址"/>
+          <Input v-model="formItem.receiver_address" placeholder="请输入收件人地址"/>
         </FormItem>
         <FormItem label="收件日期" prop="receive_date">
-          <DatePicker v-model="formData.receive_date" type="date" placeholder="请选择日期" :options="receiveTimeOption" @on-change="onReceiveTimeChange"/>
+          <DatePicker v-model="formItem.receive_date" type="date" placeholder="请选择日期" :options="receiveTimeOption" @on-change="onReceiveTimeChange"/>
         </FormItem>
         <FormItem label="运费" prop="price">
-          <Input v-model="formData.price" placeholder="请输入金额"/>
+          <Input v-model="formItem.price" placeholder="请输入金额"/>
         </FormItem>
         <FormItem label="运费已付" prop="paid">
-          <i-switch size="large" :true-value="true" :false-value="false" v-model="formData.paid">
+          <i-switch size="large" :true-value="true" :false-value="false" v-model="formItem.paid">
             <span slot="open">已付</span>
             <span slot="close">到付</span>
           </i-switch>
         </FormItem>
-<!--        <FormItem label="物流" prop="info">-->
-<!--          <router-link :to="getTracking">-->
-<!--            <Button>-->
-<!--              查看物流-->
-<!--            </Button>-->
-<!--          </router-link>-->
-<!--        </FormItem>-->
-<!--        <FormItem label="物流" prop="description">-->
-<!--          <Input v-model="formItem.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="如果有什么想说的……"/>-->
-<!--        </FormItem>-->
         <FormItem>
           <Button type="primary" @click="postRequest"> {{formItem.buttonPrompt}}</Button>
         </FormItem>
@@ -68,7 +58,7 @@
 <script>
   import router from '../router'
   export default {
-    name: 'Expenditure',
+    name: 'PackageModify',
     props: {
       formItem: {}
     },
@@ -77,7 +67,13 @@
         if (value === '') {
           callback(new Error('请输入金额'))
         } else {
-          let v = parseFloat(value.toString())
+          const s = value.toString()
+          for (let i = 0; i < s.length; i++) {
+            if (s.charAt(i) !== '.' && (s.charAt(i) < '0' || s.charAt(i) > '9')) {
+              callback(new Error('不能输入 0-9 和小数点以外的任何字符'))
+            }
+          }
+          const v = parseFloat(s)
           if (v > 0) {
             callback()
           } else {
@@ -125,9 +121,6 @@
           receiver_city: [
             {required: true, trigger: 'blur'}
           ],
-          send_date: [
-            {required: true, trigger: 'blur'}
-          ],
           price: [
             {required: true, trigger: 'blur'},
             {validator: priceValidator, trigger: 'blur'}
@@ -149,8 +142,7 @@
             {validator: phoneValidator, trigger: 'blur'}
           ]
         },
-        city: [],
-        formData: {}
+        city: []
       }
     },
     methods: {
@@ -164,9 +156,8 @@
         await this.$http.post('http://127.0.0.1:3000/Location/Query', {
           father: father
         })
-          .then(response => {
+          .then(async response => {
             if (response) {
-              console.log(response.data)
               const data = response.data
               for (const x of data) {
                 array.push({
@@ -175,12 +166,11 @@
                   children: []
                 })
               }
+              for (const x of array) {
+                await this.getCityData(x.children, x.value)
+              }
             }
           })
-        for (const x of array) {
-          console.log(x.value)
-          await this.getCityData(x.children, x.value)
-        }
       },
       validate (data) {
         if (data.receive_date === '') {
@@ -188,15 +178,15 @@
         }
       },
       async postRequest () {
-        this.validate(this.formData)
+        this.validate(this.formItem)
+        console.log(this.formItem)
         const _this = this
-        await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formData)
+        await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formItem)
           .then(() => {
             _this.$Message.success('操作成功！')
             router.push('/PackageManage')
           })
           .catch((error) => {
-            console.log(error)
             _this.$Modal.error({
               title: '操作失败',
               content: error.data
@@ -233,12 +223,6 @@
     async mounted () {
       await this.getCityData(this.city)
       console.log(this.city)
-      this.formData = this.formItem
-    },
-    computed: {
-      getTracking () {
-        return '/PackageModify/' + this.formItem.package_id
-      }
     }
   }
 </script>
