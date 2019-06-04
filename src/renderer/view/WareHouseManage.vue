@@ -48,19 +48,17 @@
             }
           },
           {
-            title: '状态',
-            key: 'status',
+            title: '仓库负责人',
+            key: 'warehouse_manager',
             filter: {
-              type: 'Select',
-              option: packageStatus
-            },
-            render: (h, params) => {
-              return h('Tag', {
-                slot: 'context',
-                props: {
-                  color: this.formatStatus(params.row.status, packageStatus).color
-                }
-              }, this.formatStatus(params.row.status, packageStatus).name)
+              type: 'Input'
+            }
+          },
+          {
+            title: '所在地',
+            key: 'location',
+            filter: {
+              type: 'Input'
             }
           },
           {
@@ -71,7 +69,7 @@
               render: (h) => {
                 return h('router-link', {
                   props: {
-                    to: '/PackageModify/0'
+                    to: '/WareHouseModify/0'
                   }
                 }, [
                   h('Button', {
@@ -88,7 +86,7 @@
               return h('div', [
                 h('router-link', {
                   props: {
-                    to: `/PackageModify/${params.row.package_id}`
+                    to: `/WareHouseModify/${params.row.package_id}`
                   }
                 }, [
                   h('Button', {
@@ -148,19 +146,18 @@
         this.requestData(payload)
       },
       async requestData (payload) {
-        await this.$http.post('http://127.0.0.1:3000/Package/Query', payload)
+        await this.$http.post('http://127.0.0.1:3000/WareHouse/Query', payload)
           .then(response => {
             this.rawData = response.data
             for (const x of this.rawData) {
-              x.sender_city = x.sender_city.join('/')
-              x.receiver_city = x.receiver_city.join('/')
+              x.location = x.location.join('/')
             }
           })
       }
     },
     async mounted () {
       this.generatePagedTableData()
-      await this.$http.post('http://127.0.0.1:3000/Package/Count').then(response => {
+      await this.$http.post('http://127.0.0.1:3000/WareHouse/Count').then(response => {
         this.total = response.data.count
       })
     }

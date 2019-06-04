@@ -51,6 +51,16 @@ const router = new Router({
       component: require('@/view/PackageManage').default
     },
     {
+      path: '/WareHouseModify/:id',
+      name: 'WareHouseModify',
+      component: require('@/view/WareHouseModify').default
+    },
+    {
+      path: '/WareHouseManage',
+      name: 'WareHouseManage',
+      component: require('@/view/WareHouseManage').default
+    },
+    {
       path: '/StaffManage',
       name: 'StaffManage',
       component: require('@/view/StaffManage').default

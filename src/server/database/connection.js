@@ -6,6 +6,8 @@ const orm = require('./utils').orm()
 
 // const Trackings = orm.import('./models/Trackings')
 const Locations = orm.import('./models/Locations')
+const WareHouses = orm.import('./models/WareHouses')
+const Packages = orm.import('./models/Packages')
 
 orm
   .authenticate()
@@ -16,8 +18,8 @@ orm
     // console.log(orm.isDefined('User'))
     // Users.drop()
     // Groups.drop()
-    // Groups.sync({force: true})
-    // Users.sync({force: true})
+    Packages.sync({force: true})
+    WareHouses.sync({force: true})
     console.log('Sync() succeed.')
   })
   .catch(err => {
