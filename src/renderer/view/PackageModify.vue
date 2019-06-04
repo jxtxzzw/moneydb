@@ -1,14 +1,18 @@
 <template>
   <div>
     <Package :formItem="formItem"/>
+    <Card>
+      <TableExpandRow :package_id="this.$route.params.id"/>
+    </Card>
   </div>
 </template>
 
 <script>
   import Package from '../components/Package'
+  import TableExpandRow from '../components/TableExpandRow'
   export default {
     name: 'PackageModify',
-    components: {Package},
+    components: {TableExpandRow, Package},
     data () {
       return {
         formItem: {
