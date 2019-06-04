@@ -118,26 +118,21 @@
           father: father
         })
           .then(response => {
-            const data = response.data
-            for (const x of data) {
-              array.push({
-                value: x.location,
-                label: x.location,
-                children: []
-              })
-              
+            if (response) {
+              console.log(response.data)
+              const data = response.data
+              for (const x of data) {
+                array.push({
+                  value: x.location,
+                  label: x.location,
+                  children: []
+                })
+              }
             }
           })
         for (const x of array) {
-          await this.$http.post('http://127.0.0.1:3000/Location/Query', {
-            father: x.value
-          })
-            .then(response => {
-              const data = response.data
-              if (data.length > 0) {
-                x.loading = false
-              }
-            })
+          console.log(x.value)
+          await this.getCityData(x.children, x.value)
         }
       },
       async postRequest () {
@@ -156,6 +151,7 @@
     },
     async mounted () {
       await this.getCityData(this.city)
+      console.log(this.city)
       this.formData = this.formItem
     },
     computed: {
