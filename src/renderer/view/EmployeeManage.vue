@@ -182,17 +182,16 @@
           .then(response => {
             if (response.status === 200) {
               this.$Message.success('删除成功')
-              this.modal_loading = false
               this.confirmDelete = false
             }
           })
           .catch(error => {
-            _this.modal_loading = false
             _this.$Modal.error({
               title: '操作失败',
               content: error.data
             })
           })
+        _this.modal_loading = false
         this.generatePagedTableData()
       }
     },

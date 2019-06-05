@@ -15,6 +15,19 @@
               @on-page-size-change="changePageSize"/>
       </div>
     </div>
+    <Modal v-model="confirmDelete" width="360">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="ios-information-circle"></Icon>
+        <span>删除确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>您正在删除一个包裹，这个操作不可撤销。</p>
+        <p>是否继续删除</p>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long :loading="modal_loading" @click="del">我已经想清楚了，删除！</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -259,11 +272,12 @@
         const _this = this
         this.modal_loading = true
         await this.$http.post('http://127.0.0.1:3000/Package/Delete', {
-          uuid: this.deleteTarget
+          package_id: this.deleteTarget
         })
           .then(response => {
             if (response.status === 200) {
               this.$Message.success('删除成功')
+              _this.confirmDeletem = false
             }
           })
           .catch(error => {
@@ -272,6 +286,8 @@
               content: error.data
             })
           })
+        _this.modal_loading = false
+        this.generatePagedTableData()
       }
     },
     async mounted () {
