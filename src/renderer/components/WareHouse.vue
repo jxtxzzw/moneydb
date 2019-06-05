@@ -18,7 +18,7 @@
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="postRequest"> {{formItem.buttonPrompt}}</Button>
+          <Button type="primary" @click="postRequest('formItem')"> {{formItem.buttonPrompt}}</Button>
         </FormItem>
       </Form>
     </Card>
@@ -43,7 +43,7 @@
             {required: true, trigger: 'blur'}
           ],
           warehouse_location: [
-            {required: true, trigger: 'blur'}
+            {required: true}
           ]
         },
         city: [],
@@ -96,7 +96,7 @@
           data.receive_date = null
         }
       },
-      async postRequest () {
+      async postRequest (name) {
         this.trim(this.formItem)
         this.$refs[name].validate(async (valid) => {
           if (valid) {

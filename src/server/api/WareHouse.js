@@ -113,4 +113,22 @@ router.get('/WareHouse/ManagerList', jwt_decode({
     })
 })
 
+router.post('/WareHouse/Delete', jwt_decode({
+  secret: secretKey
+}), (request, response) => {
+  const params = request.body
+  console.log(request.user.uuid)
+  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
+  // 过期用插件自带的就好，不要自己做了
+  WareHouses.destroy({
+    where: params
+  })
+    .then(() => {
+      response.sendStatus(200)
+    })
+    .catch(() => {
+      response.sendStatus(406)
+    })
+})
+
 module.exports = router

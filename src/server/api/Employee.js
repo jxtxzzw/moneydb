@@ -94,6 +94,17 @@ router.post('/Employee/Query', jwt_decode({
   // 过期用插件自带的就好，不要自己做了
   Employees.findAll(payload)
     .then(async project => {
+      for (const p of project) {
+        Members.findOne({
+          where: {
+            uuid: p.uuid
+          },
+          attributes: ['email']
+        })
+          .then(email => {
+            p.email = email
+          })
+      }
       response.json(project)
     })
 })

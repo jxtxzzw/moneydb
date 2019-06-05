@@ -21,9 +21,10 @@
           <Input v-model="formItem.salary" placeholder="月薪"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="postRequest"> {{formItem.buttonPrompt}}</Button>
+          <Button type="primary" @click="postRequest('formItem')"> {{formItem.buttonPrompt}}</Button>
         </FormItem>
       </Form>
+      <Button v-if="this.formItem.buttonPrompt === '修改'" type="warning" ghost @click="resetPassword">重置密码</Button>
     </Card>
   </div>
 </template>
@@ -60,6 +61,8 @@
           callback(new Error('手机号是必填的'))
         } else if (value.toString().length !== 11) {
           callback(new Error('请输入正确的手机号'))
+        } else {
+          callback()
         }
       }
       const emailValidator = async (rule, value, callback) => {
@@ -99,20 +102,43 @@
           email: [
             {required: true, type: 'email', trigger: 'blur'},
             {validator: emailValidator, trigger: 'blur'}
+          ],
+          birthday: [
+            {required: true}
           ]
         }
       }
     },
     methods: {
+      async resetPassword () {
+        const _this = this
+        await this.$http.post('http://127.0.0.1/User/ResetPassword', {
+          uuid: this.formItem.uuid
+        })
+          .then(response => {
+            if (response.status === 200) {
+              this.$Modal.success({
+                title: '密码重置成功',
+                content: '重置后的密码已经发送到员工邮箱。（发邮件就不做了……）'
+              })
+            }
+          })
+          .catch(error => {
+            _this.$Modal.error({
+              title: '操作失败',
+              content: error.data
+            })
+          })
+      },
       trim (data) {
         if (data.uuid === '系统将自动生成') {
           data.uuid = ''
         }
       },
-      async postRequest () {
-        this.trim(this.formItem)
+      async postRequest (name) {
         this.$refs[name].validate(async (valid) => {
           if (valid) {
+            this.trim(this.formItem)
             const _this = this
             await this.$http.post('http://127.0.0.1:3000/Employee/Add', this.formItem)
               .then(() => {
@@ -125,6 +151,8 @@
                   content: error.data
                 })
               })
+          } else {
+            console.log('not valid')
           }
         })
       }

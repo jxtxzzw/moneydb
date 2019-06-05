@@ -80,4 +80,21 @@ router.post('/User/ChangePassword', jwt_decode({secret: secretKey}), (request, r
     })
 })
 
+router.post('/User/ResetPassword', jwt_decode({secret: secretKey}), (request, response) => {
+  const params = request.body
+  const uuid = request.user.uuid//如果不是管理员就不给做，直接403
+  Members.findOne({
+    where: params
+  })
+    .then(project => {
+      if (project == null) {
+        response.sendStatus(403)
+      } else {
+        Members.update({
+          password: '112233' // 这里换成随机密码
+        }, params)
+      }
+    })
+})
+
 module.exports = router

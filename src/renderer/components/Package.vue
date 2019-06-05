@@ -34,9 +34,6 @@
         <FormItem label="收件人地址" prop="receiver_address">
           <Input v-model="formItem.receiver_address" placeholder="请输入收件人地址"/>
         </FormItem>
-        <FormItem label="收件日期" prop="receive_date">
-          <DatePicker v-model="formItem.receive_date" type="date" placeholder="请选择日期" :options="receiveTimeOption" @on-change="onReceiveTimeChange"/>
-        </FormItem>
         <FormItem label="运费" prop="price">
           <Input v-model="formItem.price" placeholder="请输入金额"/>
         </FormItem>
@@ -47,7 +44,7 @@
           </i-switch>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="postRequest"> {{formItem.buttonPrompt}}</Button>
+          <Button type="primary" @click="postRequest('formItem')"> {{formItem.buttonPrompt}}</Button>
         </FormItem>
       </Form>
     </Card>
@@ -95,6 +92,15 @@
           callback(new Error('手机号是必填的'))
         } else if (value.toString().length !== 11) {
           callback(new Error('请输入正确的手机号'))
+        } else {
+          callback()
+        }
+      }
+      const cityValidator = (rule, value, callback) => {
+        if (value.length > 0) {
+          callback()
+        } else {
+          callback(new Error('城市是必填项'))
         }
       }
       return {
@@ -116,14 +122,19 @@
             {required: true, trigger: 'blur'}
           ],
           sender_city: [
-            {required: true, trigger: 'blur'}
+            {required: true},
+            {validator: cityValidator}
           ],
           receiver_city: [
-            {required: true, trigger: 'blur'}
+            {required: true},
+            {validator: cityValidator}
           ],
           price: [
             {required: true, trigger: 'blur'},
             {validator: priceValidator, trigger: 'blur'}
+          ],
+          send_date: [
+            {required: true}
           ],
           sender_address: [
             {required: true, trigger: 'blur'},
@@ -177,7 +188,7 @@
           data.receive_date = null
         }
       },
-      async postRequest () {
+      async postRequest (name) {
         this.trim(this.formItem)
         this.$refs[name].validate(async (valid) => {
           if (valid) {
