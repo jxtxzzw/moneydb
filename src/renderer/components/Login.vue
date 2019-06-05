@@ -6,6 +6,12 @@
         <Alert type="success">
           欢迎你，工号 {{this.$store.state.Auth.user_id}}，您已经处于登录状态。
         </Alert>
+        <Alert>
+          <p>如果您有任何问题，请与管理员联系并提供您的 UUID：。
+            请注意，您不应该向任何人透露任何其他信息（包括但不限于您的密码、手机）。
+            UUID 具有全局唯一性，因此管理员的任何操作只需要……
+          </p>
+        </Alert>
         <p>其他信息</p>
         <p>诸如修改密码</p>
         <Button>

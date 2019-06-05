@@ -7,6 +7,7 @@ const jwt_decode = require('express-jwt')
 const {secretKey} = require('../router/salt')
 
 const Employees = orm.import('../database/models/Employees')
+const Members = orm.import('../database/models/Members')
 
 router.post('/Employee/Count', jwt_decode({
   secret: secretKey
@@ -48,7 +49,6 @@ router.post('/Employee/Add', jwt_decode({
   })
     .then( project => {
       if (!project) {
-        let inSequence = false
         Employees.count().then(count => {
           Employees.create(payload)
             .then(() => {
@@ -89,10 +89,13 @@ router.post('/Employee/EmailUnique', jwt_decode({
   console.log(request.user.uuid)
   // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
   // 过期用插件自带的就好，不要自己做了
-  Employees.count({
-    email: payload.email
+  Members.count({
+    where: {
+      email: payload.email
+    }
   })
     .then(count => {
+      console.log(count)
       response.json({
         unique: count === 0
       })
