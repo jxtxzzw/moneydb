@@ -91,25 +91,29 @@
           await this.getCityData(x.children, x.value)
         }
       },
-      validate (data) {
+      trim (data) {
         if (data.receive_date === '') {
           data.receive_date = null
         }
       },
       async postRequest () {
-        this.validate(this.formItem)
-        const _this = this
-        await this.$http.post('http://127.0.0.1:3000/WareHouse/Add', this.formItem)
-          .then(() => {
-            _this.$Message.success('操作成功！')
-            router.push('/WareHouseManage')
-          })
-          .catch((error) => {
-            _this.$Modal.error({
-              title: '操作失败',
-              content: error.data
-            })
-          })
+        this.trim(this.formItem)
+        this.$refs[name].validate(async (valid) => {
+          if (valid) {
+            const _this = this
+            await this.$http.post('http://127.0.0.1:3000/WareHouse/Add', this.formItem)
+              .then(() => {
+                _this.$Message.success('操作成功！')
+                router.push('/WareHouseManage')
+              })
+              .catch((error) => {
+                _this.$Modal.error({
+                  title: '操作失败',
+                  content: error.data
+                })
+              })
+          }
+        })
       }
     },
     async mounted () {

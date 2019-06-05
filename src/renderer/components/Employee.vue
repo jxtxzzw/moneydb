@@ -104,25 +104,29 @@
       }
     },
     methods: {
-      validate (data) {
+      trim (data) {
         if (data.uuid === '系统将自动生成') {
           data.uuid = ''
         }
       },
       async postRequest () {
-        this.validate(this.formItem)
-        const _this = this
-        await this.$http.post('http://127.0.0.1:3000/Employee/Add', this.formItem)
-          .then(() => {
-            _this.$Message.success('操作成功！')
-            router.push('/EmployeeManage')
-          })
-          .catch((error) => {
-            _this.$Modal.error({
-              title: '操作失败',
-              content: error.data
-            })
-          })
+        this.trim(this.formItem)
+        this.$refs[name].validate(async (valid) => {
+          if (valid) {
+            const _this = this
+            await this.$http.post('http://127.0.0.1:3000/Employee/Add', this.formItem)
+              .then(() => {
+                _this.$Message.success('操作成功！')
+                router.push('/EmployeeManage')
+              })
+              .catch((error) => {
+                _this.$Modal.error({
+                  title: '操作失败',
+                  content: error.data
+                })
+              })
+          }
+        })
       }
     }
   }
