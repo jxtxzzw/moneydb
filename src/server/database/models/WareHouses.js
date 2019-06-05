@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Locatoins = sequelize.import('./Locations')
-  const WareHousesManagers = sequelize.import('./WareHousesManagers')
+  const WareHouseManagers = sequelize.import('./WareHouseManagers')
   const WareHouses = sequelize.define('WareHouses', {
     warehouse_id: {
       type: DataTypes.INTEGER,
@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   })
-  WareHouses.belongsTo(WareHousesManagers, {
+  WareHouses.belongsTo(WareHouseManagers, {
     foreignKey: 'warehouse_manager',
-    targetKey: 'uuid',
+    targetKey: 'manager_id',
     onUpdate: 'CASCADE',
     onDelete: 'RESTRICT'
   })

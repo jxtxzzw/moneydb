@@ -179,7 +179,6 @@
       },
       async postRequest () {
         this.validate(this.formItem)
-        console.log(this.formItem)
         const _this = this
         await this.$http.post('http://127.0.0.1:3000/Package/Add', this.formItem)
           .then(() => {

@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const Departments = sequelize.import('./Departments')
-  const Members = sequelize.define('Members', {
+  return sequelize.define('Members', {
     uuid: {
       type: DataTypes.STRING,
       primaryKey: true,
       validate: {
         isUUID: 4
-      }
+      },
+      defaultValue: DataTypes.UUIDV4
     },
     email: {
       type: DataTypes.STRING,
@@ -18,19 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     password: {
-      type: DataTypes.STRING,
-      validate: {
-        isStrongPassword (value) {
-          if (value === '') {
-            throw new Error('Only even values are allowed!')
-          }
-        }
-      }
+      type: DataTypes.STRING
+    },
+    enabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   })
-  Members.belongsTo(Departments, {
-    foreignKey: 'dept_id',
-    onDelete: 'CASCADE'
-  })
-  return Members
 }

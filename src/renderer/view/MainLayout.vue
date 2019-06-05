@@ -66,7 +66,7 @@
                 <Icon type="md-school"/>
                 信息管理
               </template>
-                <MenuItem name="StaffManage" to="/StaffManage">
+                <MenuItem name="EmployeeManage" to="/EmployeeManage">
                   员工
                 </MenuItem>
                 <MenuItem name="PackageManage"  to="/PackageManage">
