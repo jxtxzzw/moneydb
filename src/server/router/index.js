@@ -31,6 +31,9 @@ router.use(WareHouse)
 const Employee = require('../api/Employee')
 router.use(Employee)
 
+const DispatchPair = require('../api/DispatchPair')
+router.use(DispatchPair)
+
 // 处理 404
 router.use((request, response, next) => {
   let err = new Error('Not Found')

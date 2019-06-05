@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const Members = sequelize.import('./Members')
+  const Employees = sequelize.import('./Employees')
   const WareHouseManagers = sequelize.define('WareHouseManagers', {
   })
-  WareHouseManagers.belongsTo(Members, {
+  WareHouseManagers.belongsTo(Employees, {
     foreignKey: 'manager_id',
     targetKey: 'uuid',
     onUpdate: 'CASCADE',

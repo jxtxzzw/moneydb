@@ -59,10 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM('已揽件', '运输中', '派件中', '已签收'),
-      allowNull: false,
-      validate: {
-        isIn: ['已揽件', '运输中', '派件中', '已签收']
-      }
+      allowNull: false
     }
   })
   Packages.belongsTo(Locations, {

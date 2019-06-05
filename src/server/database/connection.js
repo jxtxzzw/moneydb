@@ -1,25 +1,35 @@
 const orm = require('./utils').orm()
 
-// const Departments = orm.import('./models/Departments')
-//
-// const Members = orm.import('./models/Members')
+const MODEL_INIT_LIST = [
+  // 'Locations',
+  // 'DispatchPairs',
+  // 'Dispatchers',
+  // 'WareHouses',
+  // 'WareHouseManagers',
+  // 'Members',
+  // 'Employees',
+  // 'Trackings',
+  // 'Packages'
+]
 
-// const Trackings = orm.import('./models/Trackings')
-const Locations = orm.import('./models/Locations')
-const WareHouseManagers = orm.import('./models/WareHouseManagers')
-const Employees = orm.import('./models/Employees')
+const MODELS = []
+
+for (const x of MODEL_INIT_LIST) {
+  MODELS.push(orm.import('./models/' + x))
+}
+
+
+function forceSyncModels(MODELS) {
+  for (const model of MODELS) {
+    model.sync({force: true})
+  }
+}
 
 orm
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.')
-    // Trackings.sync({force: true})
-    // Locations.sync({force: true})
-    // console.log(orm.isDefined('User'))
-    // Users.drop()
-    // Groups.drop()
-    // Packages.sync({force: true})
-    Employees.sync({force: true})
+    forceSyncModels(MODELS)
     console.log('Sync() succeed.')
   })
   .catch(err => {

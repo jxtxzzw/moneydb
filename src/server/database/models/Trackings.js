@@ -1,9 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
   const Packages = sequelize.import('./Packages')
+  const WareHouses = sequelize.import('./WareHouses')
   const Trackings = sequelize.define('Trackings', {
-    log: {
-      type: DataTypes.STRING,
-      allowNull: false
+    action: {
+      type: DataTypes.ENUM('入库', '出库'),
+      allowNull: false,
+      validate: {
+        isIn: ['入库', '出库']
+      }
     },
     date: {
       type: DataTypes.DATE,
@@ -15,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'package_id',
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
+  })
+  Trackings.belongsTo(WareHouses, {
+    foreignKey: 'warehouse_id',
+    targetKey: 'warehouse_id',
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   })
   return Trackings
 }

@@ -1,13 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Members', {
-    uuid: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      validate: {
-        isUUID: 4
-      },
-      defaultValue: DataTypes.UUIDV4
-    },
+  const Members = sequelize.define('Members', {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,11 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING
-    },
-    enabled: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
     }
   })
+  return Members
 }

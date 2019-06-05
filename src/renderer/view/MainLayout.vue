@@ -57,8 +57,8 @@
                 <MenuItem name="LogisticsInfoAdd" to="/LogisticsInfoAdd">
                   运输状态录入
                 </MenuItem>
-                <MenuItem name="DispachInfoAdd" to="/DispachInfoAdd">
-                  派件状态录入
+                <MenuItem name="DispachInfoAdd" to="/DispatchingView">
+                  派件状态
                 </MenuItem>
             </Submenu>
             <Submenu name="Management">

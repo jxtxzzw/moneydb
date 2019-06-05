@@ -71,6 +71,11 @@ const router = new Router({
       component: require('@/view/EmployeeModify').default
     },
     {
+      path: '/DispatchingView',
+      name: 'DispatchingView',
+      component: require('@/view/DispatchingView').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
