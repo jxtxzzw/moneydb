@@ -56,16 +56,16 @@ router.post('/Package/Add', jwt_decode({
           } else {
             Packages.max('package_id').then(max => {
               inSequence = payload.package_id === max + 1
+              if (inSequence) {
+                payload.status = '已揽件'
+                Packages.create(payload)
+                  .then(() => {
+                    response.sendStatus(200)
+                  })
+              } else {
+                response.sendStatus(403)
+              }
             })
-          }
-          if (inSequence) {
-            payload.status = '已揽件'
-            Packages.create(payload)
-              .then(() => {
-                response.sendStatus(200)
-              })
-          } else {
-            response.sendStatus(403)
           }
         })
       } else {
@@ -77,6 +77,9 @@ router.post('/Package/Add', jwt_decode({
           response.sendStatus(200)
           }
         )
+          .catch( () => {
+            response.sendStatus(406)
+          })
       }
     })
 
@@ -130,6 +133,22 @@ router.post('/Package/Query', jwt_decode({
         p.receiver_city = await getCascadedLocation(p.receiver_city)
       }
       response.json(project)
+    })
+})
+
+router.post('/Package/Delete', jwt_decode({
+  secret: secretKey
+}), (request, response) => {
+  const payload = request.body
+  console.log(request.user.uuid)
+  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
+  // 过期用插件自带的就好，不要自己做了
+  Packages.destroy(payload)
+    .then(() => {
+      response.sendStatus(200)
+    })
+    .catch(() => {
+      response.sendStatus(406)
     })
 })
 

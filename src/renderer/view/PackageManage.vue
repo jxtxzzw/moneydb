@@ -56,6 +56,9 @@
         pageNumber: 1,
         pageSize: 10,
         lackingAuth: false,
+        confirmDelete: false,
+        modal_loading: false,
+        deleteTarget: '',
         tableColumns: [
           {
             title: '包裹ID',
@@ -197,22 +200,21 @@
                     }
                   }, '修改')
                 ]),
-                h('router-link', {
+                h('Button', {
                   props: {
-                    to: `/Package/${params.row.package_id}`
-                    // onclick直接发消息到后台吧，不要再开一个页面了
-                  }
-                }, [
-                  h('Button', {
-                    props: {
-                      type: 'error',
-                      disabled: this.lackingAuth
-                    },
-                    style: {
-                      margin: '5px 5px 5px 5px'
+                    type: 'error',
+                    disabled: this.lackingAuth
+                  },
+                  style: {
+                    margin: '5px 5px 5px 5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.confirmDelete = true
+                      this.deleteTarget = params.row.uuid
                     }
-                  }, '删除')
-                ])
+                  }
+                }, '删除')
               ])
             }
           }
@@ -251,6 +253,24 @@
               x.sender_city = x.sender_city.join('/')
               x.receiver_city = x.receiver_city.join('/')
             }
+          })
+      },
+      async del () {
+        const _this = this
+        this.modal_loading = true
+        await this.$http.post('http://127.0.0.1:3000/Package/Delete', {
+          uuid: this.deleteTarget
+        })
+          .then(response => {
+            if (response.status === 200) {
+              this.$Message.success('删除成功')
+            }
+          })
+          .catch(error => {
+            _this.$Modal.error({
+              title: '操作失败',
+              content: error.data
+            })
           })
       }
     },

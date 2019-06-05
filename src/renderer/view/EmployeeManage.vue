@@ -15,6 +15,19 @@
               @on-page-size-change="changePageSize"/>
       </div>
     </div>
+    <Modal v-model="confirmDelete" width="360">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="ios-information-circle"></Icon>
+        <span>删除确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>您正在删除一位员工，这个操作不可撤销。</p>
+        <p>是否继续删除</p>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long :loading="modal_loading" @click="del">我已经想清楚了，删除！</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -32,6 +45,9 @@
         pageNumber: 1,
         pageSize: 10,
         lackingAuth: false,
+        confirmDelete: false,
+        modal_loading: false,
+        deleteTarget: '',
         tableColumns: [
           {
             title: '员工工号',
@@ -106,22 +122,21 @@
                     }
                   }, '修改')
                 ]),
-                h('router-link', {
+                h('Button', {
                   props: {
-                    to: `/Employee/${params.row.uuid}`
-                    // onclick直接发消息到后台吧，不要再开一个页面了
-                  }
-                }, [
-                  h('Button', {
-                    props: {
-                      type: 'error',
-                      disabled: this.lackingAuth
-                    },
-                    style: {
-                      margin: '5px 5px 5px 5px'
+                    type: 'error',
+                    disabled: this.lackingAuth
+                  },
+                  style: {
+                    margin: '5px 5px 5px 5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.confirmDelete = true
+                      this.deleteTarget = params.row.uuid
                     }
-                  }, '删除')
-                ])
+                  }
+                }, '删除')
               ])
             }
           }
@@ -157,6 +172,28 @@
           .then(response => {
             this.rawData = response.data
           })
+      },
+      async del () {
+        const _this = this
+        this.modal_loading = true
+        await this.$http.post('http://127.0.0.1:3000/Employee/Delete', {
+          uuid: this.deleteTarget
+        })
+          .then(response => {
+            if (response.status === 200) {
+              this.$Message.success('删除成功')
+              this.modal_loading = false
+              this.confirmDelete = false
+            }
+          })
+          .catch(error => {
+            _this.modal_loading = false
+            _this.$Modal.error({
+              title: '操作失败',
+              content: error.data
+            })
+          })
+        this.generatePagedTableData()
       }
     },
     async mounted () {

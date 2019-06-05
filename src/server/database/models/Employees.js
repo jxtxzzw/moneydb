@@ -33,14 +33,21 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'uuid',
     sourceKey: 'uuid',
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
   })
   const {md5, MD5_SUFFIX} = require('../../router/salt')
-  Employees.afterCreate(async (employee, options) => {
+  Employees.afterCreate(async (employee) => {
     await Members.create({
-      email: employee.email,
+      email: employee.uuid + '@zzw.mock.com',
       uuid: employee.uuid,
       password: MD5_SUFFIX.OUTER + md5(MD5_SUFFIX.INNER + employee.phone.toString().substr(7))
+    })
+  })
+  Employees.beforeDestroy(async (employee) => {
+    await Members.destroy({
+      where: {
+        uuid: employee.uuid
+      }
     })
   })
   return Employees

@@ -56,15 +56,15 @@ router.post('/WareHouse/Add', jwt_decode({
           } else {
             WareHouses.max('warehouse_id').then(max => {
               inSequence = payload.warehouse_id === max + 1
+              if (inSequence) {
+                WareHouses.create(payload)
+                  .then(() => {
+                    response.sendStatus(200)
+                  })
+              } else {
+                response.sendStatus(403)
+              }
             })
-          }
-          if (inSequence) {
-            WareHouses.create(payload)
-              .then(() => {
-                response.sendStatus(200)
-              })
-          } else {
-            response.sendStatus(403)
           }
         })
       } else {
