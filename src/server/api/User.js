@@ -59,4 +59,25 @@ router.post('/User/Login', (request, response) => {
     })
 })
 
+router.post('/User/ChangePassword', jwt_decode({secret: secretKey}), (request, response) => {
+  const params = request.body
+  Members.findOne({
+    where: {
+      uuid: request.user.uuid,
+      password: params.oldPassword // 校验一次旧密码
+    }
+  })
+    .then(project => {
+      if (project == null) {
+        response.sendStatus(403)
+      } else {
+        Members.update({
+          password: params.newPassword
+        }, {
+          uuid: request.user.uuid
+        })
+      }
+    })
+})
+
 module.exports = router

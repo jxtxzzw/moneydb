@@ -14,6 +14,29 @@
         </Alert>
         <p>其他信息</p>
         <p>诸如修改密码</p>
+        <div>
+          <p>修改密码</p>
+          <Form ref="changePasswordForm" :model="changePasswordForm" :rules="changePasswordValidator">
+            <FormItem prop="oldPassword">
+              <Input type="password" v-model="changePasswordForm.oldPassword" placeholder="输入旧的密码">
+                <Icon type="ios-lock-outline" slot="prepend"></Icon>
+              </Input>
+            </FormItem>
+            <FormItem prop="newPassword">
+              <Input type="password" v-model="changePasswordForm.newPassword" placeholder="设置新的密码">
+                <Icon type="ios-lock-outline" slot="prepend"></Icon>
+              </Input>
+            </FormItem>
+            <FormItem prop="rePassword">
+              <Input type="password" v-model="changePasswordForm.rePassword" placeholder="重复输入新的密码" @keyup.enter.native="handleChangePasswordSubmit('changePasswordForm')">
+                <Icon type="ios-lock-outline" slot="prepend"></Icon>
+              </Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="handleChangePasswordSubmit('changePasswordForm')">修改密码</Button>
+            </FormItem>
+          </Form>
+        </div>
         <Button>
           查看
         </Button>
@@ -46,7 +69,17 @@
   export default {
     name: 'Login',
     data () {
+      const samePasswordValidator = (rule, value, callback) => {
+        if (value.toString() !== this.changePasswordForm.newPassword.toString()) {
+          callback(new Error('两次输入的密码不一致'))
+        }
+      }
       return {
+        changePasswordForm: {
+          oldPassword: '',
+          newPassword: '',
+          rePassword: ''
+        },
         loginForm: {
           username: '',
           password: ''
@@ -58,6 +91,21 @@
           password: [
             { required: true, message: '请输入您的密码', trigger: 'blur' },
             { type: 'string', min: 1, message: '密码的最小长度是 6', trigger: 'blur' }
+          ]
+        },
+        changePasswordValidator: {
+          oldPassword: [
+            { required: true, message: '请输入您的密码', trigger: 'blur' },
+            { type: 'string', min: 1, message: '密码的最小长度是 6', trigger: 'blur' }
+          ],
+          newPassword: [
+            { required: true, message: '请输入您的密码', trigger: 'blur' },
+            { type: 'string', min: 1, message: '密码的最小长度是 6', trigger: 'blur' }
+          ],
+          rePassword: [
+            { required: true, message: '请输入您的密码', trigger: 'blur' },
+            { type: 'string', min: 1, message: '密码的最小长度是 6', trigger: 'blur' },
+            { validator: samePasswordValidator, trigger: 'blur' }
           ]
         }
       }
@@ -77,6 +125,28 @@
                 if (res && res.status === 200) {
                   this.loginInteract(res.data.success)
                   this.$store.dispatch('login', res.data.token)
+                } else {
+                  this.loginInteract(false, '出现了意料之外的错误，请联系管理员！')
+                }
+              })
+              .catch(function (response) {
+                _this.loginInteract(false, response)
+              })
+          }
+        })
+      },
+      async handleChangePasswordSubmit () {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            const params = {
+              oldPassword: MD5_SUFFIX.OUTER + md5(MD5_SUFFIX.INNER + this.changePasswordForm.oldPassword),
+              newPassword: MD5_SUFFIX.OUTER + md5(MD5_SUFFIX.INNER + this.changePasswordForm.newPassword)
+            }
+            const _this = this
+            this.$http.post('http://127.0.0.1:3000/User/ChangePassword', params)
+              .then(res => {
+                if (res && res.status === 200) {
+                  this.logout()
                 } else {
                   this.loginInteract(false, '出现了意料之外的错误，请联系管理员！')
                 }

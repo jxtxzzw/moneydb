@@ -9,6 +9,8 @@ const router = express.Router()
 const jwtAuth = require('./jwt')
 router.use(jwtAuth)
 
+// 注意哦，uuid 一定要从 token 解密中获得，不能从 payload 中因为会伪造，而 auth 没办法伪造 Bearer
+
 // router.use((request, response, next) => {
 //   // 任何路由信息都会执行这里面的语句
 //   console.log('this is a api request!')
