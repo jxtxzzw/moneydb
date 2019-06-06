@@ -1,48 +1,52 @@
 <template>
   <div>
     <Card>
-      {{isLogin}}
+      
       <div v-if="isLogin">
         <Alert type="success">
           欢迎你，工号 {{this.$store.state.Auth.user_id}}，您已经处于登录状态。
         </Alert>
-        <Alert>
-          <p>如果您有任何问题，请与管理员联系并提供您的 UUID：。
-            请注意，您不应该向任何人透露任何其他信息（包括但不限于您的密码、手机）。
-            UUID 具有全局唯一性，因此管理员的任何操作只需要……
-          </p>
-        </Alert>
-        <p>其他信息</p>
-        <p>诸如修改密码</p>
-        <div>
-          <p>修改密码</p>
-          <Form ref="changePasswordForm" :model="changePasswordForm" :rules="changePasswordValidator">
-            <FormItem prop="oldPassword">
-              <Input type="password" v-model="changePasswordForm.oldPassword" placeholder="输入旧的密码">
-                <Icon type="ios-lock-outline" slot="prepend"></Icon>
-              </Input>
-            </FormItem>
-            <FormItem prop="newPassword">
-              <Input type="password" v-model="changePasswordForm.newPassword" placeholder="设置新的密码">
-                <Icon type="ios-lock-outline" slot="prepend"></Icon>
-              </Input>
-            </FormItem>
-            <FormItem prop="rePassword">
-              <Input type="password" v-model="changePasswordForm.rePassword" placeholder="重复输入新的密码" @keyup.enter.native="handleChangePasswordSubmit('changePasswordForm')">
-                <Icon type="ios-lock-outline" slot="prepend"></Icon>
-              </Input>
-            </FormItem>
-            <FormItem>
-              <Button type="primary" @click="handleChangePasswordSubmit('changePasswordForm')">修改密码</Button>
-            </FormItem>
-          </Form>
-        </div>
-        <Button>
-          查看
-        </Button>
-        <Button @click="logout()">
-          注销
-        </Button>
+        <Tabs value="LoginTabs">
+          <TabPane label='个人信息查看' name='profile'>
+            <Alert>
+              <p>如果您有任何问题，请与管理员联系并提供您的 UUID：。
+                请注意，您不应该向任何人透露任何其他信息（包括但不限于您的密码、手机）。
+                UUID 具有全局唯一性，因此管理员的任何操作只需要……
+              </p>
+            </Alert>
+            <p>其他信息</p>
+            <div>
+              <Button @click="logout()">
+                注销
+              </Button>
+            </div>
+          </TabPane>
+          <TabPane label='密码修改' name='name2'>
+            <div>
+              <p>修改密码</p>
+              <Form ref="changePasswordForm" :model="changePasswordForm" :rules="changePasswordValidator">
+                <FormItem prop="oldPassword">
+                  <Input type="password" v-model="changePasswordForm.oldPassword" placeholder="输入旧的密码">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem prop="newPassword">
+                  <Input type="password" v-model="changePasswordForm.newPassword" placeholder="设置新的密码">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem prop="rePassword">
+                  <Input type="password" v-model="changePasswordForm.rePassword" placeholder="重复输入新的密码" @keyup.enter.native="handleChangePasswordSubmit('changePasswordForm')">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                  </Input>
+                </FormItem>
+                <FormItem>
+                  <Button type="primary" @click="handleChangePasswordSubmit('changePasswordForm')">修改密码</Button>
+                </FormItem>
+              </Form>
+            </div>
+          </TabPane>
+        </Tabs>
       </div>
       <div v-else>
         <Form ref="loginForm" :model="loginForm" :rules="loginValidator">
