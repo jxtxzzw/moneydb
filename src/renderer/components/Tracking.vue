@@ -53,7 +53,6 @@
       }
     },
     async mounted () {
-      // const packageID = this.$route.params.package_id
       const packageID = this.package_id
       await this.$http.post('http://127.0.0.1:3000/Package/Tracking', {
         package_id: packageID
@@ -61,7 +60,6 @@
         .then(response => {
           this.packageStatus = response.data.status
           if (this.packageStatus === 'NOT FOUND') {
-            // nothing?
           } else {
             if (this.packageStatus === '已揽件') {
               this.currentStep = 0
@@ -78,7 +76,6 @@
               this.currentStatus = 'process'
             }
             this.rawData = response.data.tracking
-            console.log(this.rawData)
           }
         })
     },
