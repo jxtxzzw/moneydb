@@ -76,6 +76,11 @@ const router = new Router({
       component: require('@/view/DispatchingView').default
     },
     {
+      path: '/Rating',
+      name: 'Rating',
+      component: require('@/components/Rating').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

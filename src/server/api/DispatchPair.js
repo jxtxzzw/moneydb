@@ -53,6 +53,34 @@ router.post('/DispatchPair/Query', jwt_decode({
     })
 })
 
+router.post('/DispatchPair/Rate', (request, response) => {
+  const package_id = request.body.package_id
+  DispatchPairs.findOne({
+    where: {
+      package_id: package_id
+    },
+    attributes: ['rate']
+  })
+    .then(project => {
+      if (project != null) {
+        response.json(project.get())
+      } else {
+        response.sendStatus(403)
+      }
+    })
+})
+
+router.post('/DispatchPair/ChangeRate', (request, response) => {
+  const rate = request.body.rate
+  const package_id = request.body.package_id
+  DispatchPairs.update({
+    rate: rate
+  }, {
+    where:{
+      package_id: package_id
+    }
+  })
+})
 
 router.post('/DispatchPair/Done', jwt_decode({
   secret: secretKey

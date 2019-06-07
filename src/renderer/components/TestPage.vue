@@ -1,15 +1,15 @@
 <template>
   <div>
-    <Tracking/>
+    <UserQuery/>
   </div>
 </template>
 
 <script>
-  import Tracking from './Tracking'
+  import UserQuery from '../view/UserQuery'
 
   export default {
     name: 'TestPage',
-    components: {Tracking}
+    components: {UserQuery}
   }
 </script>
 
