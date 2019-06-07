@@ -265,6 +265,8 @@
             for (const x of this.rawData) {
               x.sender_city = x.sender_city.join('/')
               x.receiver_city = x.receiver_city.join('/')
+              x.send_date = x.send_date.toString().substring(0, 10)
+              x.receive_date = x.receive_date.toString().substring(0, 10)
             }
           })
       },

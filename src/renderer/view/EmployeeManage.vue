@@ -171,6 +171,9 @@
         await this.$http.post('http://127.0.0.1:3000/Employee/Query', payload)
           .then(response => {
             this.rawData = response.data
+            for (const x of this.rawData) {
+              x.birthday = x.birthday.toString().substring(0, 10)
+            }
           })
       },
       async del () {
