@@ -2,7 +2,7 @@ const orm = require('./utils').orm()
 
 const MODEL_INIT_LIST = [
   // 'Locations',
-  // 'DispatchPairs',
+  'DispatchPairs',
   // 'Dispatchers',
   // 'WareHouses',
   // 'WareHouseManagers',

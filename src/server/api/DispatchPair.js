@@ -70,6 +70,7 @@ router.post('/DispatchPair/Rate', (request, response) => {
     })
 })
 
+const Dispatchers = orm.import('../database/models/Dispatchers')
 router.post('/DispatchPair/ChangeRate', (request, response) => {
   const rate = request.body.rate
   const package_id = request.body.package_id
@@ -79,6 +80,41 @@ router.post('/DispatchPair/ChangeRate', (request, response) => {
     where:{
       package_id: package_id
     }
+  }).then(() => {
+    DispatchPairs.findOne({
+      where: {
+        package_id: package_id
+      },
+      attributes: ['uuid']
+    }).then(project => {
+      const uuid = project.get('uuid')
+      DispatchPairs.sum('rate', {
+        where: {
+          uuid: uuid
+        }
+      }).then(sum => {
+        DispatchPairs.count({
+          where: {
+            uuid: uuid
+          }
+        })
+          .then(count => {
+            const avg = sum / count
+            Dispatchers.update({
+              rate: avg
+            }, {
+              where: {
+                uuid: uuid
+              }
+            }).then(() => {
+              response.sendStatus(200)
+            }).catch(error => {
+              console.log(error)
+              response.sendStatus(406)
+            })
+          })
+      })
+    })
   })
 })
 
