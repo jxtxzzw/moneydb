@@ -2,9 +2,9 @@ const orm = require('./utils').orm()
 
 const MODEL_INIT_LIST = [
   // 'Locations',
-  'HumanResources',
-  'Transports',
-  'Receptionists',
+  'Permissions',
+  'MemberPermissions',
+  // 'Receptionists',
   // 'WareHouseManagers',
   // 'Members',
   // 'Employees',
