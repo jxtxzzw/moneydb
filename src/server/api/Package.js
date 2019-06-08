@@ -159,8 +159,67 @@ router.post('/Package/Checkpoint', async (request, response) => {
               package_id: params.package_id,
               warehouse_id: warehouse_id,
               transport_id: request.user.uuid
-            }).then(() => {
-              response.sendStatus(200)
+            }).then(async () => {
+              await Packages.update({
+                status: '运输中'
+              }, {
+                where: {
+                  package_id: params.package_id
+                }
+              })
+                // 只要有物流信息了，就自动进入运输中这一状态
+                .then(async () => {
+                  await Packages.findOne({
+                    where: {
+                      package_id: params.package_id
+                    },
+                    attributes: ['receiver_city']
+                  })
+                    .then(async city1Project => {
+                      const city1 = city1Project.get('receiver_city')
+                      await WareHouses.findOne({
+                        where: {
+                          warehouse_id: warehouse_id
+                        },
+                        attributes: ['location']
+                      })
+                        .then(async city2Project => {
+                          const city2 = city2Project.get('location')
+                          if (city1 === city2) {
+                            await Packages.update({
+                              status: '派件中'
+                            }, {
+                              where: {
+                                package_id: params.package_id
+                              }
+                            })
+                            // 如果当前城市和收件人城市相同，则进入派件状态
+                            const Dispatchers = orm.import('../database/models/Dispatchers')
+                            await Dispatchers.count().then(async count => {
+                              const rand = Math.floor(Math.random() * count)
+                              await Dispatchers.findOne({
+                                offset: rand
+                              })
+                                .then(async randomProject => {
+                                  // 随机一个派件员
+                                  const randomUUID = randomProject.get('uuid')
+                                  const DispatchPairs = orm.import('../database/models/DispatchPairs')
+                                  await DispatchPairs.create({
+                                    package_id: params.package_id,
+                                    uuid: randomUUID
+                                  })
+                                    // 加入派件信息表
+                                    .then(() => {
+                                      response.sendStatus(200)
+                                    })
+                                })
+                            })
+                          } else {
+                            response.sendStatus(200)
+                          }
+                        })
+                    })
+                })
             }, () => {
               response.sendStatus(403)
             })
