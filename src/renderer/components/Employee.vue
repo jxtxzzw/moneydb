@@ -84,14 +84,23 @@
           await this.$http.post('http://127.0.0.1:3000/Employee/EmailUnique', {
             email: this.formItem.email
           })
-            .then(response => {
+            .then(async response => {
               if (response.data.unique) {
                 callback()
               } else {
                 if (this.formItem.uuid === '系统将自动生成') {
                   callback(new Error('邮箱已经存在'))
                 } else {
-                  callback()
+                  await this.$http.post('http://127.0.0.1:3000/User/Email', {
+                    uuid: this.formItem.uuid
+                  })
+                    .then(email => {
+                      if (email.data !== value) {
+                        callback(new Error('已经有别人用了这个邮箱了！'))
+                      } else {
+                        callback()
+                      }
+                    })
                 }
               }
             })
