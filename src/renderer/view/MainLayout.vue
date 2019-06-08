@@ -52,7 +52,7 @@
                 <Icon type="md-school"/>
                 物流管理
               </template>
-                <MenuItem name="LogisticsInfoAdd" to="/LogisticsInfoAdd">
+                <MenuItem name="TrackingCheckpoint" to="/TrackingCheckpoint">
                   运输状态录入
                 </MenuItem>
                 <MenuItem name="DispachInfoAdd" to="/DispatchingView">

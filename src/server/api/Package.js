@@ -7,6 +7,7 @@ const jwt_decode = require('express-jwt')
 const {secretKey} = require('../router/salt')
 
 const Packages = orm.import('../database/models/Packages')
+const WareHouses = orm.import('../database/models/WareHouses')
 
 router.post('/Package/Count', jwt_decode({
   secret: secretKey
@@ -107,6 +108,26 @@ router.post('/Package/Tracking', (request, response) => {
             })
           })
       }
+    })
+})
+
+router.post('/Package/Checkpoint', (request, response) => {
+  const params = request.body
+  WareHouses.findOne({
+    where: {
+      warehouse_name: params.warehouse_name
+    },
+    attributes: ['warehouse_id']
+  })
+    .then(async warehouse => {
+      const warehouse_id = warehouse.get('warehouse_id')
+      await Trackings.create({
+        action: params.action,
+        date: Date.now(),
+        package_id: params.package_id,
+        warehouse_id: warehouse_id,
+        transport_id: request.user.uuid
+      }).then(response.sendStatus(200))
     })
 })
 

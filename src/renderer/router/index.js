@@ -11,9 +11,9 @@ const router = new Router({
       component: require('@/components/LandingPage').default
     },
     {
-      path: '/MockFilterTable',
-      name: 'MockFilterTable',
-      component: require('@/components/MockFilterTable').default
+      path: '/TrackingCheckpoint',
+      name: 'TrackingCheckpoint',
+      component: require('@/view/TrackingCheckpoint').default
     },
     {
       path: '/Accounts',
