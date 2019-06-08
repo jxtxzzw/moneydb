@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'uuid',
     targetKey: 'uuid',
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   DispatchPairs.belongsTo(Packages, {
     foreignKey: 'package_id',

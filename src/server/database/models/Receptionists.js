@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'receptionist_id',
     targetKey: 'uuid',
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
   })
   return Receptionists
 }

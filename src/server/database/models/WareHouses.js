@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'warehouse_manager',
     targetKey: 'manager_id',
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   return WareHouses
 }

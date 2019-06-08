@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'uuid',
     targetKey: 'uuid',
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
   })
   return Dispatchers
 }
