@@ -99,7 +99,12 @@ router.post('/Package/Tracking', (request, response) => {
         Trackings.findAll({
           where: params,
           attributes: ['action', 'warehouse_id', 'transport_id', 'date'],
-          order: [['date', 'DESC']]
+          order: [['date', 'DESC']],
+          include:
+            {
+              model: WareHouses,
+              attributes: ['warehouse_name']
+            }
         })
           .then(trackingProject => {
             response.json({

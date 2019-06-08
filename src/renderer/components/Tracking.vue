@@ -33,7 +33,7 @@
             {{formDate(item.date)}}
           </p>
           <p class="content" :style="{'padding-left': '5px'}">
-            {{item.log}}
+            从 {{item.WareHouse.warehouse_name}} {{item.action}}
           </p>
         </TimelineItem>
       </Timeline>
