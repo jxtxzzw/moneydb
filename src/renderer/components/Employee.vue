@@ -17,6 +17,15 @@
         <FormItem label="出生年月" prop="birthday">
           <DatePicker v-model="formItem.birthday" type="date" placeholder="请选择日期" :options="birthdayTimeOption" />
         </FormItem>
+        <FormItem label="权限" prop="privileges">
+          <CheckboxGroup v-model="formItem.privileges">
+            <Checkbox label="人力资源权限"></Checkbox>
+            <Checkbox label="前台接待权限"></Checkbox>
+            <Checkbox label="运输权限"></Checkbox>
+            <Checkbox label="派件权限"></Checkbox>
+            <Checkbox label="仓储权限"></Checkbox>
+          </CheckboxGroup>
+        </FormItem>
         <FormItem label="月薪" prop="salary">
           <Input v-model="formItem.salary" placeholder="月薪"/>
         </FormItem>
@@ -35,7 +44,8 @@
   export default {
     name: 'EmployeeModify',
     props: {
-      formItem: {}
+      formItem: {
+      }
     },
     data () {
       const salaryValidator = (rule, value, callback) => {
@@ -92,11 +102,9 @@
             {required: true, trigger: 'blur'}
           ],
           salary: [
-            {required: true, trigger: 'blur'},
             {validator: salaryValidator, trigger: 'blur'}
           ],
           phone: [
-            {required: true, trigger: 'blur'},
             {validator: phoneValidator, trigger: 'blur'}
           ],
           email: [
@@ -105,6 +113,9 @@
           ],
           birthday: [
             {required: true}
+          ],
+          privileges: [
+            {required: true}
           ]
         }
       }
@@ -112,7 +123,7 @@
     methods: {
       async resetPassword () {
         const _this = this
-        await this.$http.post('http://127.0.0.1/User/ResetPassword', {
+        await this.$http.post('http://127.0.0.1:3000/User/ResetPassword', {
           uuid: this.formItem.uuid
         })
           .then(response => {
@@ -138,6 +149,7 @@
       async postRequest (name) {
         this.$refs[name].validate(async (valid) => {
           if (valid) {
+            console.log(this.formItem)
             this.trim(this.formItem)
             const _this = this
             await this.$http.post('http://127.0.0.1:3000/Employee/Add', this.formItem)

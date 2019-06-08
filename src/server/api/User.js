@@ -92,7 +92,9 @@ router.post('/User/ResetPassword', jwt_decode({secret: secretKey}), (request, re
       } else {
         Members.update({
           password: '112233' // 这里换成随机密码
-        }, params)
+        }, {
+          where: params
+        })
       }
     })
 })
