@@ -6,9 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     action: {
       type: DataTypes.ENUM('入库', '出库'),
       allowNull: false,
-      validate: {
-        isIn: ['入库', '出库']
-      }
     },
     date: {
       type: DataTypes.DATE,
@@ -18,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   })
   Trackings.belongsTo(Packages, {
     foreignKey: 'package_id',
+    unique: false,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE'
   })
