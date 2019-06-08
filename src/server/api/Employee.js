@@ -82,9 +82,7 @@ router.post('/Employee/Add', jwt_decode({
                   where: {
                     uuid: payload.uuid
                   }
-                }).then( () => {
-                  }
-                )
+                })
               }
             })
             .catch(() => {
@@ -97,15 +95,12 @@ router.post('/Employee/Add', jwt_decode({
               await instance.findOrCreate({
                 where: option
               }).then(async () => {
-                await flushUserPermission(uuid, str, true)
               })
               return
             }
           }
           await instance.destroy({
             where: option
-          }).then(async () => {
-            await flushUserPermission(uuid, str, false)
           })
         }
         await flushPrivilege("仓储权限", WH, {manager_id: uuid})
