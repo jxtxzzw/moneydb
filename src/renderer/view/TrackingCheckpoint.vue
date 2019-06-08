@@ -14,7 +14,7 @@
             </Select>
         </FormItem>
         <FormItem label="包裹编号" prop="package_id" placeholder="包裹编号">
-          <Input v-model="formItem.package_id"/>
+          <Input v-model="formItem.package_id" @keyup.enter.native="postRequest('formItem')"/>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="postRequest('formItem')">录入</Button>
@@ -85,6 +85,7 @@
                 this.reset()
               })
               .catch((error) => {
+                console.log(error)
                 _this.$Modal.error({
                   title: '操作失败',
                   content: error.data

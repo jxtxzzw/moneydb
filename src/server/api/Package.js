@@ -127,7 +127,11 @@ router.post('/Package/Checkpoint', (request, response) => {
         package_id: params.package_id,
         warehouse_id: warehouse_id,
         transport_id: request.user.uuid
-      }).then(response.sendStatus(200))
+      }).then(() => {
+        response.sendStatus(200)
+      }, () => {
+        response.sendStatus(403)
+      })
     })
 })
 
