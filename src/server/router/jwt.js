@@ -8,7 +8,11 @@ const jwtAuth = expressJwt({
   .unless({
     path: [
       '/User/Login',
-      'Package/Tracking'
+      '/Package/Tracking',
+      '/UserQuery/Query',
+      '/UserQuery/Count',
+      '/DispatchPair/ChangeRate',
+      '/Dispatcher/Rate'
     ]
   })
 

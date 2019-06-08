@@ -69,26 +69,22 @@ const router = new Router({
 
 // 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== 'Login' && to.name !== 'Welcome') {
+  if (to.name !== 'Login' && to.name !== 'Welcome' && to.name !== 'UserQuery') {
     Vue.http.post('http://127.0.0.1:3000/User/Auth', {
-      username: '1',
-      password: '1',
       from: from.name,
       to: to.name
     })
       .then(
         response => {
           if (response.data.token) {
-            console.log('token:', response.data.token)
-            window.localStorage.setItem('jxtxzzw_jwt_token', response.data.token)
-          } else {
+            this.$store.dispatch('login', response.data.token)
           }
           return response
         },
         error => {
           const errRes = error.response
           if (errRes.status === 401) {
-            window.localStorage.removeItem('jxtxzzw_jwt_token')
+            this.$store.dispatch('logout')
             router.push('/Login')
           } else if (errRes.status === 403) {
             console.log('jump to 403')

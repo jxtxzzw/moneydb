@@ -21,7 +21,6 @@ router.post('/UserQuery/Count', (request, response) => {
 })
 
 const getCascadedLocation = require('../database/utils').getCascadedLocation
-const DispatchPairs = orm.import('../database/models/DispatchPairs')
 router.post('/UserQuery/Query',  (request, response) => {
   const phone = request.body.phone
   const payload = request.body.payload
@@ -46,5 +45,7 @@ router.post('/UserQuery/Query',  (request, response) => {
       response.json(project)
     })
 })
+
+
 
 module.exports = router
