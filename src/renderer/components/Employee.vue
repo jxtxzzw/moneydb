@@ -88,9 +88,20 @@
               if (response.data.unique) {
                 callback()
               } else {
-                callback(new Error('邮箱已经存在'))
+                if (this.formItem.uuid === '系统将自动生成') {
+                  callback(new Error('邮箱已经存在'))
+                } else {
+                  callback()
+                }
               }
             })
+        }
+      }
+      const privilegeValidator = (rule, value, callback) => {
+        if (value.length === 0) {
+          callback(new Error('员工权限是必须的，会存在一个没有任何权限的员工吗？'))
+        } else {
+          callback()
         }
       }
       return {
@@ -117,7 +128,8 @@
             {required: true}
           ],
           privileges: [
-            {required: true}
+            {required: true},
+            {validator: privilegeValidator, trigger: 'blur'}
           ]
         }
       }
