@@ -6,22 +6,8 @@
         <Alert type="success">
           欢迎你，工号 {{this.$store.state.Auth.user_id}}，您已经处于登录状态。
         </Alert>
-        <Tabs value="LoginTabs">
-          <TabPane label='个人信息查看' name='profile'>
-            <Alert>
-              <p>如果您有任何问题，请与管理员联系并提供您的 UUID：。
-                请注意，您不应该向任何人透露任何其他信息（包括但不限于您的密码、手机）。
-                UUID 具有全局唯一性，因此管理员的任何操作只需要……
-              </p>
-            </Alert>
-            <p>其他信息</p>
-            <div>
-              <Button @click="logout()">
-                注销
-              </Button>
-            </div>
-          </TabPane>
-          <TabPane label='密码修改' name='name2'>
+        <Tabs value="changePasswordPane">
+          <TabPane label='密码修改' name='changePasswordPane'>
             <div>
               <p>修改密码</p>
               <Form ref="changePasswordForm" :model="changePasswordForm" :rules="changePasswordValidator">
@@ -46,7 +32,19 @@
               </Form>
             </div>
           </TabPane>
+          <TabPane label='个人信息查看' name='forFuture'>
+            <Alert show-icon>
+              <template slot="desc">
+                例如可以查看自己过去 6 个月的奖金，需要其他系统（例如财务系统）提供接口，此处不表
+              </template>
+            </Alert>
+          </TabPane>
         </Tabs>
+        <div>
+          <Button @click="logout()" type="warning" long>
+            注销
+          </Button>
+        </div>
       </div>
       <div v-else>
         <Form ref="loginForm" :model="loginForm" :rules="loginValidator">
@@ -61,7 +59,7 @@
             </Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" @click="handleLoginSubmit('loginForm')">登录</Button>
+            <Button long type="primary" @click="handleLoginSubmit('loginForm')">登录</Button>
           </FormItem>
         </Form>
       </div>

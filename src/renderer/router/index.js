@@ -26,16 +26,6 @@ const router = new Router({
       component: require('@/components/TestPage').default
     },
     {
-      path: '/Profile',
-      name: 'Profile',
-      component: require('@/components/Profile').default
-    },
-    {
-      path: '/sensitive',
-      name: 'sensitive',
-      component: require('@/components/SensitiveTest').default
-    },
-    {
       path: '/Login',
       name: 'Login',
       component: require('@/components/Login').default

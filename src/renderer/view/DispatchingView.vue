@@ -1,5 +1,10 @@
 <template>
   <div>
+    <Alert show-icon>
+      <template slot="desc">
+        只能查看分配给自己的、且正在派件中的订单。 <br/>
+      </template>
+    </Alert>
     <filter-table @on-search="onSearch"
                   :data="rawData"
                   :columns="tableColumns" />
@@ -154,6 +159,7 @@
         this.requestData(payload)
       },
       async requestData (payload) {
+        console.log(payload)
         await this.$http.post('http://127.0.0.1:3000/DispatchPair/Query', payload)
           .then(response => {
             this.rawData = response.data
@@ -171,7 +177,7 @@
     },
     async mounted () {
       this.generatePagedTableData()
-      await this.$http.post('http://127.0.0.1:3000/Package/Count').then(response => {
+      await this.$http.post('http://127.0.0.1:3000/DispatcherPair/Count').then(response => {
         this.total = response.data.count
       })
     }

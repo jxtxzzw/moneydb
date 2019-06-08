@@ -12,7 +12,18 @@ const Packages = orm.import('../database/models/Packages')
 router.post('/DispatchPair/Count', jwt_decode({
   secret: secretKey
 }), (request, response) => {
-  DispatchPairs.count().then(count => {
+  DispatchPairs.count({
+    where: {
+      uuid: request.user.uuid
+    },
+    include: {
+      model: Packages,
+      where: {
+        status: '派件中'
+      }
+    }
+  }).then(count => {
+    console.log(count)
     response.json({
       count: count
     })
@@ -23,7 +34,17 @@ const getCascadedLocation = require('../database/utils').getCascadedLocation
 router.post('/DispatchPair/Query', jwt_decode({
   secret: secretKey
 }), (request, response) => {
+  console.log('111')
   const payload = request.body
+  if (payload.where === null) {
+    payload.where = {
+      uuid: request.user.uuid
+    }
+  } else {
+    payload.where.uuid = request.user.uuid
+  }
+  console.log(payload)
+
   payload.include = [{
     model: Packages,
     attributes: [
