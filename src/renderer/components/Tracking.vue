@@ -19,7 +19,15 @@
         <Step title="已签收" content="感谢您的使用"></Step>
       </Steps>
     </Card>
+
     <Card v-if="packageStatus !== 'NOT FOUND'">
+      <Alert v-if="currentStep >= 2" show-icon>
+        <template slot="desc">
+          您的包裹由派件员 {{this.dispatcherInfo.name}} 派送<br/>
+          联系电话 {{this.dispatcherInfo.phone}}<br/>
+          该派件员平均得分 <Rate :value="this.dispatcherInfo.rate" disabled/>
+        </template>
+      </Alert>
       <Timeline v-if="rawData && rawData.length > 0">
         <TimelineItem v-for="item in rawData">
           <p class="time" :style="{'font-size': '14px', 'font-weight': 'bold'}">
@@ -49,7 +57,8 @@
         packageStatus: '',
         rawData: [],
         currentStep: 0,
-        currentStatus: ''
+        currentStatus: '',
+        dispatcherInfo: {}
       }
     },
     async mounted () {
@@ -57,7 +66,7 @@
       await this.$http.post('http://127.0.0.1:3000/Package/Tracking', {
         package_id: packageID
       })
-        .then(response => {
+        .then(async response => {
           this.packageStatus = response.data.status
           if (this.packageStatus === 'NOT FOUND') {
           } else {
@@ -77,6 +86,12 @@
             }
             this.rawData = response.data.tracking
           }
+          await this.$http.post('http://127.0.0.1:3000/Dispatcher/Info', {
+            package_id: this.package_id
+          })
+            .then(response => {
+              this.dispatcherInfo = response.data
+            })
         })
     },
     methods: {

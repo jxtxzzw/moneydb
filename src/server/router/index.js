@@ -39,6 +39,9 @@ router.use(DispatchPair)
 const UserQuery = require('../api/UserQuery')
 router.use(UserQuery)
 
+const Dispatcher = require('../api/Dispatcher')
+router.use(Dispatcher)
+
 // 处理 404
 router.use((request, response, next) => {
   let err = new Error('Not Found')

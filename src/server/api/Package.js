@@ -97,7 +97,7 @@ router.post('/Package/Tracking', (request, response) => {
         const status = statusProject[0].status
         Trackings.findAll({
           where: params,
-          attributes: ['log', 'date'],
+          attributes: ['action', 'warehouse_id', 'transport_id', 'date'],
           order: [['date', 'DESC']]
         })
           .then(trackingProject => {
