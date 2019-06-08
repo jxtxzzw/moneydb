@@ -65,8 +65,16 @@ router.post('/Package/Add', jwt_decode({
                   if (inSequence) {
                     payload.status = '已揽件'
                     await Packages.create(payload)
-                      .then(() => {
-                        response.sendStatus(200)
+                      .then(async () => {
+                        const PackageReceptionists = orm.import('../database/models/PackageReceptionists')
+                        await PackageReceptionists.findOrCreate({
+                          where: {
+                            package_id: payload.package_id,
+                            receptionist_id: request.user.uuid
+                          }
+                        }).then(() => {
+                          response.sendStatus(200)
+                        })
                       })
                   } else {
                     response.sendStatus(403)
