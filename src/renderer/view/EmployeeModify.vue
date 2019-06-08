@@ -45,10 +45,15 @@
             await this.$http.post('http://127.0.0.1:3000/Employee/Privilege', {
               uuid: response.data[0].uuid
             })
-              .then(privilege => {
-                this.formItem = response.data[0]
-                this.formItem.privileges = privilege.data
-                this.formItem.buttonPrompt = this.showPrompt()
+              .then(async privilege => {
+                await this.$http.post('http://127.0.0.1:3000/User/Email', {
+                  uuid: response.data[0].uuid
+                }).then(email => {
+                  this.formItem = response.data[0]
+                  this.formItem.privileges = privilege.data
+                  this.formItem.email = email.data
+                  this.formItem.buttonPrompt = this.showPrompt()
+                })
               })
           })
       }

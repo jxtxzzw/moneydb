@@ -1,8 +1,6 @@
 <template>
   <div>
-    <Rate v-if="formItem.uuid === undefined"></Rate>
-    <Card v-else>
-      <p> p: {{this.formItem.privileges}}</p>
+    <Card>
       <Form ref="formItem" :model="formItem" :rules="ruleValidation" :label-width="80">
         <FormItem label="员工工号" prop="uuid">
           <Input v-model="formItem.uuid" disabled readonly/>

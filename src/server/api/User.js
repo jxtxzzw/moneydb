@@ -99,4 +99,20 @@ router.post('/User/ResetPassword', jwt_decode({secret: secretKey}), (request, re
     })
 })
 
+router.post('/User/Email', jwt_decode({secret: secretKey}), (request, response) => {
+  const uuid = request.body.uuid
+  Members.findOne({
+    where: {
+      uuid: uuid
+    }
+  })
+    .then(project => {
+      if (project == null) {
+        response.sendStatus(403)
+      } else {
+        response.json(project.get('email'))
+      }
+    })
+})
+
 module.exports = router
