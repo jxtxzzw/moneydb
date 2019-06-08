@@ -51,11 +51,8 @@ router.post('/WareHouse/Add', jwt_decode({
       if (!project) {
         let inSequence = false
         WareHouses.count().then(count => {
-          if (count === 0) {
-            inSequence = payload.warehouse_id === 1
-          } else {
             WareHouses.max('warehouse_id').then(max => {
-              inSequence = payload.warehouse_id === max + 1
+              inSequence = ((count === 0 && payload.warehouse_id === 1) || payload.warehouse_id === max + 1)
               if (inSequence) {
                 WareHouses.create(payload)
                   .then(() => {
@@ -65,7 +62,6 @@ router.post('/WareHouse/Add', jwt_decode({
                 response.sendStatus(403)
               }
             })
-          }
         })
       } else {
         WareHouses.update(payload,{

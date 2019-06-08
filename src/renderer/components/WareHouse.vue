@@ -9,10 +9,12 @@
           <Input v-model="formItem.warehouse_name" placeholder="仓库名称"/>
         </FormItem>
         <FormItem label="仓库负责人" prop="warehouse_manager" placeholder="仓库负责人">
-          <Select v-model="formItem.warehouse_manager" filterable clearable >
-            <Option v-for="manager in warehouseManagerList" :value="manager.value" :key="manager.value">{{ manager.value }}</Option>
-          </Select>
+            <Select v-model="formItem.warehouse_manager" filterable clearable >
+              <Option v-for="manager in warehouseManagerList" :value="manager.value" :key="manager.value">{{ manager.value }}</Option>
+            </Select>
+          <p>因为员工可能会有重名，所以必须要用 UUID 来标记</p>
         </FormItem>
+  
         <FormItem label="仓库所在地" prop="location">
           <Cascader v-model="formItem.location" :data="city" change-on-select trigger="hover" filterable :load-data="loadCascadeCity" />
           <!--change-on-select 允许用户停止在任意一级，filterable 允许用户直接输入搜索任意一级的内容并快速选中-->

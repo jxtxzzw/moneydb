@@ -51,22 +51,18 @@ router.post('/Package/Add', jwt_decode({
       if (!project) {
         let inSequence = false
         Packages.count().then(count => {
-          if (count === 0) {
-            inSequence = payload.package_id === 1
-          } else {
-            Packages.max('package_id').then(max => {
-              inSequence = payload.package_id === max + 1
-              if (inSequence) {
-                payload.status = '已揽件'
-                Packages.create(payload)
-                  .then(() => {
-                    response.sendStatus(200)
-                  })
-              } else {
-                response.sendStatus(403)
-              }
-            })
-          }
+          Packages.max('package_id').then(max => {
+            inSequence = ((count === 0 && payload.package_id === 1) || payload.package_id === max + 1)
+            if (inSequence) {
+              payload.status = '已揽件'
+              Packages.create(payload)
+                .then(() => {
+                  response.sendStatus(200)
+                })
+            } else {
+              response.sendStatus(403)
+            }
+          })
         })
       } else {
         Packages.update(payload,{
