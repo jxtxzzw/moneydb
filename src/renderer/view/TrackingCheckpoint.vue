@@ -8,7 +8,7 @@
             <Option value="出库" :key="'出库'">出库</Option>
           </Select>
         </FormItem>
-        <FormItem label="仓库" prop="warehouse" placeholder="仓库">
+        <FormItem label="仓库" prop="warehouse_name" placeholder="仓库">
             <Select v-model="formItem.warehouse_name" filterable clearable >
               <Option v-for="warehouse in warehouseList" :value="warehouse.value" :key="warehouse.value">{{ warehouse.value }}</Option>
             </Select>
@@ -55,7 +55,7 @@
           package_id: [
             {required: true, trigger: 'blur'},
             {validator: selectorValidator, trigger: 'blur'}
-          ],
+          ]
         }
       }
     },
@@ -82,6 +82,7 @@
             await this.$http.post('http://127.0.0.1:3000/Package/Checkpoint', this.formItem)
               .then(() => {
                 _this.$Message.success('操作成功！')
+                this.reset()
               })
               .catch((error) => {
                 _this.$Modal.error({
@@ -91,10 +92,17 @@
               })
           }
         })
+      },
+      reset () {
+        this.formItem = {
+          action: '',
+          warehouse_name: '',
+          package_id: ''
+        }
       }
     },
     async mounted () {
-      // await this.getCityData(this.city)
+      this.reset()
       await this.getWareHouseData()
     }
   }
