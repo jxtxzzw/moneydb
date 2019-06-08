@@ -96,8 +96,6 @@
       },
       reset () {
         this.formItem = {
-          action: '',
-          warehouse_name: '',
           package_id: ''
         }
       }
