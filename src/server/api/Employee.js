@@ -90,15 +90,17 @@ router.post('/Employee/Add', jwt_decode({
       if (x === str) {
         await instance.findOrCreate({
           where: option
+        }).then(async () => {
+          await flushUserPermission(uuid, str, true)
         })
-        await flushUserPermission(uuid, str, true)
         return
       }
     }
     await instance.destroy({
       where: option
+    }).then(async () => {
+      await flushUserPermission(uuid, str, false)
     })
-    await flushUserPermission(uuid, str, false)
   }
   await flushPrivilege("仓储权限", WH, {manager_id: uuid})
   await flushPrivilege("前台接待权限", RC, {receptionist_id: uuid})
@@ -174,7 +176,6 @@ router.post('/Employee/Privilege', jwt_decode({
   await queryPrivileges("运输权限", TP, {transport_id: uuid})
   await queryPrivileges("人力资源权限", HR, {hr_id: uuid})
   await queryPrivileges("派件权限", DP, {uuid: uuid})
-  console.log(privileges)
   response.json(privileges)
 })
 
