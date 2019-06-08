@@ -18,6 +18,7 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "npm run lint:fix",
     "server": "cd src/server && node index",
+    "init-database": "cd src/server/database && node init-database.js",
     "run": "start npm run server && start npm run dev"
   },
   "build": {

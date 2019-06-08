@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const session = require('express-session')
 const bodyParser = require('body-parser')
-// const initial = require('./database/initial')
 
 const router = require('./router')
 app.use(function (req, res, next) {
@@ -21,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use('/', router)
 app.set('trust proxy', 1)
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'jxtxzzw_secretKey_b6vj$tV<yw2T!4dD',
   resave: false,
   saveUninitialized: true
 }))
