@@ -245,9 +245,6 @@
               x.receiver_city = x.receiver_city.join('/')
             }
           })
-          .catch(error => {
-            console.log(error)
-          })
       },
       async userQuery () {
         this.resultShow = true

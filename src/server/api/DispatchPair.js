@@ -23,7 +23,6 @@ router.post('/DispatchPair/Count', jwt_decode({
       }
     }
   }).then(count => {
-    console.log(count)
     response.json({
       count: count
     })
@@ -34,7 +33,6 @@ const getCascadedLocation = require('../database/utils').getCascadedLocation
 router.post('/DispatchPair/Query', jwt_decode({
   secret: secretKey
 }), (request, response) => {
-  console.log('111')
   const payload = request.body
   if (payload.where === null) {
     payload.where = {
@@ -43,7 +41,6 @@ router.post('/DispatchPair/Query', jwt_decode({
   } else {
     payload.where.uuid = request.user.uuid
   }
-  console.log(payload)
 
   payload.include = [{
     model: Packages,
@@ -130,7 +127,6 @@ router.post('/DispatchPair/ChangeRate', (request, response) => {
             }).then(() => {
               response.sendStatus(200)
             }).catch(error => {
-              console.log(error)
               response.sendStatus(406)
             })
           })
@@ -144,7 +140,7 @@ router.post('/DispatchPair/Done', jwt_decode({
 }), (request, response) => {
   const payload = request.body
   console.log(request.user.uuid)
-  console.log(payload)
+  console.log(paylad)
   DispatchPairs.findOne({
     where: {
       package_id: payload.package_id,
@@ -154,7 +150,6 @@ router.post('/DispatchPair/Done', jwt_decode({
   })
     .then(async project => {
       if (project != null) {
-        console.log(project.get('package_id'))
         await Packages.update({
           status: '已签收',
           receive_date: Date.now()

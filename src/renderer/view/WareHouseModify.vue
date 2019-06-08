@@ -41,7 +41,6 @@
         }
         await this.$http.post('http://127.0.0.1:3000/WareHouse/Query', payload)
           .then(response => {
-            console.log(payload)
             this.formItem = response.data[0]
             this.formItem.buttonPrompt = this.showPrompt()
           })

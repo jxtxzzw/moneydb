@@ -23,7 +23,6 @@ router.post('/UserQuery/Count', (request, response) => {
 const getCascadedLocation = require('../database/utils').getCascadedLocation
 const DispatchPairs = orm.import('../database/models/DispatchPairs')
 router.post('/UserQuery/Query',  (request, response) => {
-  // console.log(request)
   const phone = request.body.phone
   const payload = request.body.payload
   Packages.findAll({
@@ -45,9 +44,6 @@ router.post('/UserQuery/Query',  (request, response) => {
         p.receiver_city = await getCascadedLocation(p.receiver_city)
       }
       response.json(project)
-    })
-    .catch(error => {
-      console.log(error)
     })
 })
 

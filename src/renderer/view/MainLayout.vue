@@ -22,8 +22,9 @@
     <Layout style="min-height: -webkit-fill-available;">
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="1">
-          <div class="layout-logo">
-          </div>
+          <router-link to="/Welcome">
+            <Icon type="ios-home" size="40" color="#FFFFFF" />
+          </router-link>
         </Menu>
       </Header>
       <Layout >
@@ -84,10 +85,8 @@
   </div>
 </template>
 <script>
-  import TestPage from '../components/TestPage'
   export default {
     name: 'MainLayout',
-    components: {TestPage},
     data () {
       return {
       }

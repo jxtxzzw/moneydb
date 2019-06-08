@@ -191,7 +191,6 @@
         return status[value] || {value: '', name: ''}
       },
       onSearch (search) {
-        console.log(search)
         let newUser = []
         for (const u of this.staff) {
           if (u.phone.includes(search.phone)) {

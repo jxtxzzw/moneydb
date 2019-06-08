@@ -172,7 +172,6 @@
       async postRequest (name) {
         this.$refs[name].validate(async (valid) => {
           if (valid) {
-            console.log(this.formItem)
             this.trim(this.formItem)
             const _this = this
             await this.$http.post('http://127.0.0.1:3000/Employee/Add', this.formItem)

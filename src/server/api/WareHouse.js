@@ -83,7 +83,6 @@ router.post('/WareHouse/Query', jwt_decode({
   secret: secretKey
 }), (request, response) => {
   const payload = request.body
-  console.log(request.user.uuid)
   // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
   // 过期用插件自带的就好，不要自己做了
   WareHouses.findAll(payload)
@@ -100,7 +99,6 @@ const WareHouseManagers = orm.import('../database/models/WareHouseManagers')
 router.get('/WareHouse/ManagerList', jwt_decode({
   secret: secretKey
 }), (request, response) => {
-  console.log(request.user.uuid)
   WareHouseManagers.findAll({
     attributes: ['manager_id']
   })

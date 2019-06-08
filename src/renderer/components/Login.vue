@@ -120,7 +120,6 @@
               username: this.loginForm.username,
               password: MD5_SUFFIX.OUTER + md5(MD5_SUFFIX.INNER + this.loginForm.password)
             }
-            console.log(params)
             const _this = this
             this.$http.post('http://127.0.0.1:3000/User/Login', params)
               .then(res => {

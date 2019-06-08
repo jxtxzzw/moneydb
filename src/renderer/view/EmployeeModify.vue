@@ -25,9 +25,6 @@
         } else {
           return '修改'
         }
-      },
-      submit () {
-        console.log()
       }
     },
     async mounted () {

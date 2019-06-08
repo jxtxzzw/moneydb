@@ -7,23 +7,13 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      name: 'Welcome',
+      component: require('@/components/LandingPage/Welcome').default
     },
     {
       path: '/TrackingCheckpoint',
       name: 'TrackingCheckpoint',
       component: require('@/view/TrackingCheckpoint').default
-    },
-    {
-      path: '/Accounts',
-      name: 'Accounts',
-      component: require('@/components/Accounts').default
-    },
-    {
-      path: '/TestPage',
-      name: 'TestPage',
-      component: require('@/components/TestPage').default
     },
     {
       path: '/Login',
@@ -66,11 +56,6 @@ const router = new Router({
       component: require('@/view/DispatchingView').default
     },
     {
-      path: '/Rating',
-      name: 'Rating',
-      component: require('@/components/Rating').default
-    },
-    {
       path: '/UserQuery',
       name: 'UserQuery',
       component: require('@/view/UserQuery').default
@@ -84,7 +69,7 @@ const router = new Router({
 
 // 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== 'Login' && to.name !== 'landing-page') {
+  if (to.name !== 'Login' && to.name !== 'Welcome') {
     Vue.http.post('http://127.0.0.1:3000/User/Auth', {
       username: '1',
       password: '1',

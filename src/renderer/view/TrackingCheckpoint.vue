@@ -64,7 +64,6 @@
         await this.$http.post('http://127.0.0.1:3000/WareHouse/Query')
           .then(response => {
             if (response) {
-              console.log(response.data)
               const data = response.data
               for (const x of data) {
                 this.warehouseList.push({
@@ -85,7 +84,6 @@
                 this.reset()
               })
               .catch((error) => {
-                console.log(error)
                 _this.$Modal.error({
                   title: '操作失败',
                   content: error.data
