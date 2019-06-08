@@ -91,7 +91,6 @@ router.post('/Employee/Add', jwt_decode({
             })
         }
         const privileges = payload.privileges
-        const flushUserPermission = require('../database/utils').flushUserPermission
         const flushPrivilege = async function(str, instance, option) {
           for (const x of privileges) {
             if (x === str) {
