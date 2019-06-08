@@ -47,7 +47,7 @@
                 个人信息
               </MenuItem>
             </Submenu>
-            <Submenu name="Logistics">
+            <Submenu name="Logistics" v-if="this.$store.state.Auth.token !== ''">
               <template slot="title">
                 <Icon type="md-school"/>
                 物流管理
@@ -59,7 +59,7 @@
                   派件状态记录
                 </MenuItem>
             </Submenu>
-            <Submenu name="Management">
+            <Submenu name="Management" v-if="this.$store.state.Auth.token !== ''">
               <template slot="title">
                 <Icon type="md-school"/>
                 企业信息管理
