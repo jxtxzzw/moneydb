@@ -11,8 +11,8 @@ const Packages = orm.import('../database/models/Packages')
 
 router.post('/DispatchPair/Count', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  DispatchPairs.count({
+}), async (request, response) => {
+  await DispatchPairs.count({
     where: {
       uuid: request.user.uuid
     },
@@ -32,7 +32,7 @@ router.post('/DispatchPair/Count', jwt_decode({
 const getCascadedLocation = require('../database/utils').getCascadedLocation
 router.post('/DispatchPair/Query', jwt_decode({
   secret: secretKey
-}), (request, response) => {
+}), async (request, response) => {
   const payload = request.body
   if (payload.where === null) {
     payload.where = {
@@ -41,7 +41,6 @@ router.post('/DispatchPair/Query', jwt_decode({
   } else {
     payload.where.uuid = request.user.uuid
   }
-
   payload.include = [{
     model: Packages,
     attributes: [
@@ -57,12 +56,7 @@ router.post('/DispatchPair/Query', jwt_decode({
       status: '派件中'
     }
   }]
-  // if 是派送员
-  //payload.where.uuid = request.user.uuid
-  // 是管理员
-  // 不加，查全部
-  // else 直接 403
-  DispatchPairs.findAll(payload)
+  await DispatchPairs.findAll(payload)
     .then(async project => {
       for (const p of project){
         p.Package.receiver_city = await getCascadedLocation(p.Package.receiver_city)
@@ -71,9 +65,9 @@ router.post('/DispatchPair/Query', jwt_decode({
     })
 })
 
-router.post('/DispatchPair/Rate', (request, response) => {
+router.post('/DispatchPair/Rate', async (request, response) => {
   const package_id = request.body.package_id
-  DispatchPairs.findOne({
+  await DispatchPairs.findOne({
     where: {
       package_id: package_id
     },
@@ -89,36 +83,36 @@ router.post('/DispatchPair/Rate', (request, response) => {
 })
 
 const Dispatchers = orm.import('../database/models/Dispatchers')
-router.post('/DispatchPair/ChangeRate', (request, response) => {
+router.post('/DispatchPair/ChangeRate', async (request, response) => {
   const rate = request.body.rate
   const package_id = request.body.package_id
-  DispatchPairs.update({
+  await DispatchPairs.update({
     rate: rate
   }, {
     where:{
       package_id: package_id
     }
-  }).then(() => {
-    DispatchPairs.findOne({
+  }).then(async () => {
+    await DispatchPairs.findOne({
       where: {
         package_id: package_id
       },
       attributes: ['uuid']
-    }).then(project => {
+    }).then(async project => {
       const uuid = project.get('uuid')
-      DispatchPairs.sum('rate', {
+      await DispatchPairs.sum('rate', {
         where: {
           uuid: uuid
         }
-      }).then(sum => {
-        DispatchPairs.count({
+      }).then(async sum => {
+        await DispatchPairs.count({
           where: {
             uuid: uuid
           }
         })
-          .then(count => {
+          .then(async count => {
             const avg = sum / count
-            Dispatchers.update({
+            await Dispatchers.update({
               rate: avg
             }, {
               where: {
@@ -137,34 +131,44 @@ router.post('/DispatchPair/ChangeRate', (request, response) => {
 
 router.post('/DispatchPair/Done', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  const payload = request.body
-  console.log(request.user.uuid)
-  console.log(paylad)
-  DispatchPairs.findOne({
+}), async (request, response) => {
+  await Dispatchers.findOne({
     where: {
-      package_id: payload.package_id,
       uuid: request.user.uuid
-    },
-    attributes: ['package_id']
+    }
   })
-    .then(async project => {
-      if (project != null) {
-        await Packages.update({
-          status: '已签收',
-          receive_date: Date.now()
-        }, {
+    .then(async auth => {
+      if (auth != null) {
+        const payload = request.body
+        await DispatchPairs.findOne({
           where: {
-            package_id: project.get('package_id')
-          }
+            package_id: payload.package_id,
+            uuid: request.user.uuid
+          },
+          attributes: ['package_id']
         })
-          .then(() => {
-            response.sendStatus(200)
+          .then(async project => {
+            if (project != null) {
+              await Packages.update({
+                status: '已签收',
+                receive_date: Date.now()
+              }, {
+                where: {
+                  package_id: project.get('package_id')
+                }
+              })
+                .then(() => {
+                  response.sendStatus(200)
+                })
+            } else {
+              response.sendStatus(403)
+            }
           })
       } else {
         response.sendStatus(403)
       }
     })
+
 })
 
 module.exports = router

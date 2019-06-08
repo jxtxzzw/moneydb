@@ -5,12 +5,12 @@ const orm = require('../database/utils').orm()
 
 const Locations = orm.import('../database/models/Locations')
 
-router.post('/Location/Query', (request, response) => {
+router.post('/Location/Query', async (request, response) => {
   const params = request.body
   if (!params.father) {
     params.father = null
   }
-  Locations.findAll({
+  await Locations.findAll({
     where: params,
     attributes: ['location']
   })

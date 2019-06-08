@@ -10,8 +10,8 @@ const WareHouses = orm.import('../database/models/WareHouses')
 
 router.post('/WareHouse/Count', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  WareHouses.count().then(count => {
+}), async (request, response) => {
+  await WareHouses.count().then(count => {
     response.json({
       count: count
     })
@@ -20,14 +20,14 @@ router.post('/WareHouse/Count', jwt_decode({
 
 router.post('/WareHouse/Max', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  WareHouses.count().then(count => {
+}), async (request, response) => {
+  await WareHouses.count().then(async count => {
     if (count === 0) {
       response.json({
         max: 0
       })
     } else {
-      WareHouses.max('warehouse_id').then(max => {
+      await WareHouses.max('warehouse_id').then(max => {
         response.json({
           max: max
         })
@@ -39,53 +39,61 @@ router.post('/WareHouse/Max', jwt_decode({
 
 router.post('/WareHouse/Add', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  const payload = request.body
-  payload.location = payload.location[payload.location.length - 1]
-  WareHouses.findOne({
+}), async (request, response) => {
+  WareHouseManagers.findOne({
     where: {
-      warehouse_id: payload.warehouse_id
+      manager_id: request.user.uuid
     }
   })
-    .then( project => {
-      if (!project) {
-        let inSequence = false
-        WareHouses.count().then(count => {
-            WareHouses.max('warehouse_id').then(max => {
-              inSequence = ((count === 0 && payload.warehouse_id === 1) || payload.warehouse_id === max + 1)
-              if (inSequence) {
-                WareHouses.create(payload)
-                  .then(() => {
-                    response.sendStatus(200)
-                  })
-              } else {
-                response.sendStatus(403)
-              }
-            })
-        })
-      } else {
-        WareHouses.update(payload,{
+    .then(async auth => {
+      if (auth != null) {
+        const payload = request.body
+        payload.location = payload.location[payload.location.length - 1]
+        await WareHouses.findOne({
           where: {
             warehouse_id: payload.warehouse_id
           }
-        }).then( () => {
-            response.sendStatus(200)
-          }
-        )
+        })
+          .then(async project => {
+            if (!project) {
+              let inSequence = false
+              await WareHouses.count().then(async count => {
+                await WareHouses.max('warehouse_id').then(async max => {
+                  inSequence = ((count === 0 && payload.warehouse_id === 1) || payload.warehouse_id === max + 1)
+                  if (inSequence) {
+                    await WareHouses.create(payload)
+                      .then(() => {
+                        response.sendStatus(200)
+                      })
+                  } else {
+                    response.sendStatus(403)
+                  }
+                })
+              })
+            } else {
+              await WareHouses.update(payload,{
+                where: {
+                  warehouse_id: payload.warehouse_id
+                }
+              }).then( () => {
+                  response.sendStatus(200)
+                }
+              )
+            }
+          })
+      } else {
+        response.sendStatus(403)
       }
     })
-
 })
 
 const getCascadedLocation = require('../database/utils').getCascadedLocation
 
 router.post('/WareHouse/Query', jwt_decode({
   secret: secretKey
-}), (request, response) => {
+}), async (request, response) => {
   const payload = request.body
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
-  WareHouses.findAll(payload)
+  await WareHouses.findAll(payload)
     .then(async project => {
       for (const p of project){
         // 这里一定一定要 await 的啊啊啊啊啊
@@ -98,8 +106,8 @@ router.post('/WareHouse/Query', jwt_decode({
 const WareHouseManagers = orm.import('../database/models/WareHouseManagers')
 router.get('/WareHouse/ManagerList', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  WareHouseManagers.findAll({
+}), async (request, response) => {
+  await WareHouseManagers.findAll({
     attributes: ['manager_id']
   })
     .then(project => {
@@ -109,19 +117,27 @@ router.get('/WareHouse/ManagerList', jwt_decode({
 
 router.post('/WareHouse/Delete', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  const params = request.body
-  console.log(request.user.uuid)
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
-  WareHouses.destroy({
-    where: params
+}), async (request, response) => {
+  WareHouseManagers.findOne({
+    where: {
+      manager_id: request.user.uuid
+    }
   })
-    .then(() => {
-      response.sendStatus(200)
-    })
-    .catch(() => {
-      response.sendStatus(406)
+    .then(async auth => {
+      if (auth != null) {
+        const params = request.body
+        await WareHouses.destroy({
+          where: params
+        })
+          .then(() => {
+            response.sendStatus(200)
+          })
+          .catch(() => {
+            response.sendStatus(406)
+          })
+      } else {
+        response.sendStatus(403)
+      }
     })
 })
 

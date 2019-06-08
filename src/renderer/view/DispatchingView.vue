@@ -159,7 +159,6 @@
         this.requestData(payload)
       },
       async requestData (payload) {
-        console.log(payload)
         await this.$http.post('http://127.0.0.1:3000/DispatchPair/Query', payload)
           .then(response => {
             this.rawData = response.data
@@ -177,7 +176,7 @@
     },
     async mounted () {
       this.generatePagedTableData()
-      await this.$http.post('http://127.0.0.1:3000/DispatcherPair/Count').then(response => {
+      await this.$http.post('http://127.0.0.1:3000/DispatchPair/Count').then(response => {
         this.total = response.data.count
       })
     }

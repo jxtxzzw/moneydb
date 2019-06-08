@@ -11,8 +11,8 @@ const Members = orm.import('../database/models/Members')
 
 router.post('/Employee/Count', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  Employees.count().then(count => {
+}), async (request, response) => {
+  await Employees.count().then(count => {
     response.json({
       count: count
     })
@@ -21,14 +21,14 @@ router.post('/Employee/Count', jwt_decode({
 
 router.post('/Employee/Max', jwt_decode({
   secret: secretKey
-}), (request, response) => {
-  Employees.count().then(count => {
+}), async (request, response) => {
+  await Employees.count().then(async count => {
     if (count === 0) {
       response.json({
         max: 0
       })
     } else {
-      Employees.max('uuid').then(max => {
+      await Employees.max('uuid').then(max => {
         response.json({
           max: max
         })
@@ -46,78 +46,87 @@ const DP = orm.import('../database/models/Dispatchers')
 router.post('/Employee/Add', jwt_decode({
   secret: secretKey
 }), async (request, response) => {
-  const payload = request.body
-  const options = {}
-  let uuid = payload.uuid
-  if (payload.uuid === '') {
-    payload.uuid = undefined
-    await Employees.create(payload)
-      .then(async project => {
-        await Members.update({
-          email: payload.email
-        }, {
-          where: {
-            uuid: project.uuid
-          }
-        })
-          .then(() => {
-            uuid = project.uuid
-          })
-      })
-      .catch((error) => {
-      })
-  } else {
-    await Employees.findOne(options)
-      .then(async project => {
-        if (!project) {
-        } else {
-          await Employees.update(payload,{
-            where: {
-              uuid: payload.uuid
-            }
-          }).then( () => {
-            }
-          )
-        }
-      })
-      .catch(() => {
-      })
-  }
-  const privileges = payload.privileges
-  const flushUserPermission = require('../database/utils').flushUserPermission
-  const flushPrivilege = async function(str, instance, option) {
-    for (const x of privileges) {
-      if (x === str) {
-        await instance.findOrCreate({
-          where: option
-        }).then(async () => {
-          await flushUserPermission(uuid, str, true)
-        })
-        return
-      }
+  await HR.findOne({
+    where: {
+      hr_id: request.user.uuid
     }
-    await instance.destroy({
-      where: option
-    }).then(async () => {
-      await flushUserPermission(uuid, str, false)
+  })
+    .then(async auth => {
+      if (auth != null) {
+        const payload = request.body
+        const options = {}
+        let uuid = payload.uuid
+        if (payload.uuid === '') {
+          payload.uuid = undefined
+          await Employees.create(payload)
+            .then(async project => {
+              await Members.update({
+                email: payload.email
+              }, {
+                where: {
+                  uuid: project.uuid
+                }
+              })
+                .then(() => {
+                  uuid = project.uuid
+                })
+            })
+            .catch((error) => {
+            })
+        } else {
+          await Employees.findOne(options)
+            .then(async project => {
+              if (!project) {
+              } else {
+                await Employees.update(payload,{
+                  where: {
+                    uuid: payload.uuid
+                  }
+                }).then( () => {
+                  }
+                )
+              }
+            })
+            .catch(() => {
+            })
+        }
+        const privileges = payload.privileges
+        const flushUserPermission = require('../database/utils').flushUserPermission
+        const flushPrivilege = async function(str, instance, option) {
+          for (const x of privileges) {
+            if (x === str) {
+              await instance.findOrCreate({
+                where: option
+              }).then(async () => {
+                await flushUserPermission(uuid, str, true)
+              })
+              return
+            }
+          }
+          await instance.destroy({
+            where: option
+          }).then(async () => {
+            await flushUserPermission(uuid, str, false)
+          })
+        }
+        await flushPrivilege("仓储权限", WH, {manager_id: uuid})
+        await flushPrivilege("前台接待权限", RC, {receptionist_id: uuid})
+        await flushPrivilege("运输权限", TP, {transport_id: uuid})
+        await flushPrivilege("人力资源权限", HR, {hr_id: uuid})
+        await flushPrivilege("派件权限", DP, {uuid: uuid})
+        return response.sendStatus(200)
+      } else {
+        response.sendStatus(403)
+      }
     })
-  }
-  await flushPrivilege("仓储权限", WH, {manager_id: uuid})
-  await flushPrivilege("前台接待权限", RC, {receptionist_id: uuid})
-  await flushPrivilege("运输权限", TP, {transport_id: uuid})
-  await flushPrivilege("人力资源权限", HR, {hr_id: uuid})
-  await flushPrivilege("派件权限", DP, {uuid: uuid})
-  return response.sendStatus(200)
+
 })
 
 router.post('/Employee/Query', jwt_decode({
   secret: secretKey
-}), (request, response) => {
+}), async (request, response) => {
   const payload = request.body
-  console.log(request.user.uuid)
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
-  Employees.findAll({
+  await Employees.findAll({
       where: payload.where,
       offset: payload.offset,
       limit: payload.limit,
@@ -134,12 +143,9 @@ router.post('/Employee/Query', jwt_decode({
 
 router.post('/Employee/EmailUnique', jwt_decode({
   secret: secretKey
-}), (request, response) => {
+}), async (request, response) => {
   const payload = request.body
-  console.log(request.user.uuid)
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
-  Members.count({
+  await Members.count({
     where: {
       email: payload.email
     }
@@ -155,10 +161,6 @@ router.post('/Employee/Privilege', jwt_decode({
   secret: secretKey
 }), async (request, response) => {
   const uuid = request.body.uuid
-  console.log(uuid)
-  console.log(request.user.uuid)
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
   let privileges = []
   const queryPrivileges = async function(str, instance, option) {
     // 这个await 要加在这里，这里！！
@@ -181,20 +183,28 @@ router.post('/Employee/Privilege', jwt_decode({
 
 router.post('/Employee/Delete', jwt_decode({
   secret: secretKey
-}), (request, response) => {
+}), async (request, response) => {
   const params = request.body
-  console.log(request.user.uuid)
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
-  Employees.destroy({
-    where: params
+  await HR.findOne({
+    where: {
+      hr_id: request.user.uuid
+    }
   })
-    .then(() => {
-      response.sendStatus(200)
-    })
-    .catch((error) => {
-      console.log(error)
-      response.sendStatus(406)
+    .then(async auth => {
+      if (auth != null) {
+        await Employees.destroy({
+          where: params
+        })
+          .then(() => {
+            response.sendStatus(200)
+          })
+          .catch((error) => {
+            console.log(error)
+            response.sendStatus(406)
+          })
+      } else {
+        response.sendStatus(403)
+      }
     })
 })
 

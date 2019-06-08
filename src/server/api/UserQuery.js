@@ -5,9 +5,9 @@ const orm = require('../database/utils').orm()
 
 const Packages = orm.import('../database/models/Packages')
 const Sequelize = require('sequelize')
-router.post('/UserQuery/Count', (request, response) => {
+router.post('/UserQuery/Count', async (request, response) => {
   const phone = request.body.phone
-  Packages.findAll({
+  await Packages.findAll({
     where: Sequelize.or({
       sender_phone: phone
     }, {
@@ -21,10 +21,10 @@ router.post('/UserQuery/Count', (request, response) => {
 })
 
 const getCascadedLocation = require('../database/utils').getCascadedLocation
-router.post('/UserQuery/Query',  (request, response) => {
+router.post('/UserQuery/Query',  async (request, response) => {
   const phone = request.body.phone
   const payload = request.body.payload
-  Packages.findAll({
+  await Packages.findAll({
     where:
     Sequelize.and(
       payload.where,

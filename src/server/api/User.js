@@ -9,10 +9,11 @@ const {secretKey} = require('../router/salt')
 
 const jwt_decode = require('express-jwt')
 
-router.post('/User/Auth', jwt_decode({secret: secretKey}), (request, response) => {
+router.post('/User/Auth', jwt_decode(
+  {
+    secret: secretKey
+  }), (request, response) => {
   const uuid = request.user.uuid
-  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
-  // 过期用插件自带的就好，不要自己做了
   Members.findOne({
     where: {
       uuid: uuid
@@ -28,9 +29,9 @@ router.post('/User/Auth', jwt_decode({secret: secretKey}), (request, response) =
     })
 })
 
-router.post('/User/Login', (request, response) => {
+router.post('/User/Login', async (request, response) => {
   const params = request.body
-  Members.findOne({
+  await Members.findOne({
     where: {
       email: params.username,
       password: params.password
@@ -59,12 +60,12 @@ router.post('/User/Login', (request, response) => {
     })
 })
 
-router.post('/User/ChangePassword', jwt_decode({secret: secretKey}), (request, response) => {
+router.post('/User/ChangePassword', jwt_decode({secret: secretKey}), async (request, response) => {
   const params = request.body
-  Members.findOne({
+  await Members.findOne({
     where: {
-      uuid: request.user.uuid,
-      password: params.oldPassword // 校验一次旧密码
+      uuid: request.user.uuid, // 只能修改自己的密码
+      password: params.oldPassword // 且必须校验一次旧密码
     }
   })
     .then(project => {
@@ -75,33 +76,48 @@ router.post('/User/ChangePassword', jwt_decode({secret: secretKey}), (request, r
           password: params.newPassword
         }, {
           uuid: request.user.uuid
+        }).then(() => {
+          response.sendStatus(200)
+        }, () => {
+          response.sendStatus(406)
         })
       }
     })
 })
 
-router.post('/User/ResetPassword', jwt_decode({secret: secretKey}), (request, response) => {
+const HR = orm.import('../database/models/HumanResources')
+router.post('/User/ResetPassword', jwt_decode({secret: secretKey}), async (request, response) => {
   const params = request.body
-  const uuid = request.user.uuid//如果不是管理员就不给做，直接403
-  Members.findOne({
-    where: params
+  await HR.findOne({
+    where: {
+      hr_id: request.user.uuid
+    }
   })
-    .then(project => {
-      if (project == null) {
-        response.sendStatus(403)
-      } else {
-        Members.update({
-          password: '112233' // 这里换成随机密码
-        }, {
+    .then(async auth => {
+      if (auth != null) {
+        await Members.findOne({
           where: params
-        }).then(response.json(200))
+        })
+          .then(project => {
+            if (project == null) {
+              response.sendStatus(403)
+            } else {
+              Members.update({
+                password: '112233' // 这里换成随机密码
+              }, {
+                where: params
+              }).then(response.json(200))
+            }
+          })
+      } else {
+        response.sendStatus(403)
       }
     })
 })
 
-router.post('/User/Email', jwt_decode({secret: secretKey}), (request, response) => {
+router.post('/User/Email', jwt_decode({secret: secretKey}), async (request, response) => {
   const uuid = request.body.uuid
-  Members.findOne({
+  await Members.findOne({
     where: {
       uuid: uuid
     }
