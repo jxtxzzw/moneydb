@@ -84,18 +84,21 @@ router.post('/Employee/Add', jwt_decode({
       })
   }
   const privileges = payload.privileges
+  const flushUserPermission = require('../database/utils').flushUserPermission
   const flushPrivilege = async function(str, instance, option) {
     for (const x of privileges) {
       if (x === str) {
         await instance.findOrCreate({
           where: option
         })
+        await flushUserPermission(uuid, str, true)
         return
       }
     }
     await instance.destroy({
       where: option
     })
+    await flushUserPermission(uuid, str, false)
   }
   await flushPrivilege("仓储权限", WH, {manager_id: uuid})
   await flushPrivilege("前台接待权限", RC, {receptionist_id: uuid})
