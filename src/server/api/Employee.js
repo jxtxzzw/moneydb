@@ -51,7 +51,6 @@ router.post('/Employee/Add', jwt_decode({
   let uuid = payload.uuid
   if (payload.uuid === '') {
     payload.uuid = undefined
-    console.log(payload)
     await Employees.create(payload)
       .then(async project => {
         await Members.update({
@@ -114,14 +113,15 @@ router.post('/Employee/Query', jwt_decode({
   // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
   // 过期用插件自带的就好，不要自己做了
   Employees.findAll({
-    where: payload.where,
-    offset: payload.offset,
-    limit: payload.limit,
-    include: {
-      attributes: ['email'],
-      model: Members
-    },
-  })
+      where: payload.where,
+      offset: payload.offset,
+      limit: payload.limit,
+      include: {
+        attributes: ['email'],
+        model: Members
+      }
+    }
+  )
     .then(async project => {
       response.json(project)
     })
@@ -140,11 +140,39 @@ router.post('/Employee/EmailUnique', jwt_decode({
     }
   })
     .then(count => {
-      console.log(count)
       response.json({
         unique: count === 0
       })
     })
+})
+
+router.post('/Employee/Privilege', jwt_decode({
+  secret: secretKey
+}), async (request, response) => {
+  const uuid = request.body.uuid
+  console.log(uuid)
+  console.log(request.user.uuid)
+  // 之后JWT生成token的时候加上组，这里取出组以后再做一次查权限
+  // 过期用插件自带的就好，不要自己做了
+  let privileges = []
+  const queryPrivileges = async function(str, instance, option) {
+    // 这个await 要加在这里，这里！！
+    await instance.findOne({
+      where: option
+    })
+      .then(project => {
+        if (project != null) {
+          privileges.push(str)
+        }
+      })
+  }
+  await queryPrivileges("仓储权限", WH, {manager_id: uuid})
+  await queryPrivileges("前台接待权限", RC, {receptionist_id: uuid})
+  await queryPrivileges("运输权限", TP, {transport_id: uuid})
+  await queryPrivileges("人力资源权限", HR, {hr_id: uuid})
+  await queryPrivileges("派件权限", DP, {uuid: uuid})
+  console.log(privileges)
+  response.json(privileges)
 })
 
 router.post('/Employee/Delete', jwt_decode({

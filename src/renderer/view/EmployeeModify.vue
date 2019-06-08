@@ -40,11 +40,16 @@
         const payload = {
           where: params
         }
-        console.log(payload)
         await this.$http.post('http://127.0.0.1:3000/Employee/Query', payload)
-          .then(response => {
-            this.formItem = response.data[0]
-            this.formItem.buttonPrompt = this.showPrompt()
+          .then(async response => {
+            await this.$http.post('http://127.0.0.1:3000/Employee/Privilege', {
+              uuid: response.data[0].uuid
+            })
+              .then(privilege => {
+                this.formItem = response.data[0]
+                this.formItem.privileges = privilege.data
+                this.formItem.buttonPrompt = this.showPrompt()
+              })
           })
       }
     }
