@@ -19,7 +19,6 @@
         <Step title="已签收" content="感谢您的使用"></Step>
       </Steps>
     </Card>
-
     <Card v-if="packageStatus !== 'NOT FOUND'">
       <Alert v-if="currentStep >= 2" show-icon>
         <template slot="desc">

@@ -32,22 +32,20 @@
             <Submenu name="info">
               <template slot="title">
                 <Icon type="md-person"/>
-                用户查询
+                公共查询
               </template>
-                <MenuItem name="PackageQuery" to="/PackageQuery">
-                  包裹查询
+                <MenuItem name="PackageQuery" to="/UserQuery">
+                  包裹信息查询
                 </MenuItem>
-                <MenuItem name="Login" to="/Login">
-                  <span v-if="this.$store.state.Auth.isLogin">
-                    个人信息
-                  </span>
-                  <span v-else>
-                    登录
-                  </span>
-                </MenuItem>
-                <MenuItem name="TestPage" to="/TestPage">
-                  测试
-                </MenuItem>
+            </Submenu>
+            <Submenu name="Employee">
+              <template slot="title">
+                <Icon type="md-person"/>
+                  员工信息
+              </template>
+              <MenuItem name="Login" to="/Login">
+                个人信息
+              </MenuItem>
             </Submenu>
             <Submenu name="Logistics">
               <template slot="title">
@@ -58,13 +56,13 @@
                   运输状态录入
                 </MenuItem>
                 <MenuItem name="DispachInfoAdd" to="/DispatchingView">
-                  派件状态
+                  派件状态记录
                 </MenuItem>
             </Submenu>
             <Submenu name="Management">
               <template slot="title">
                 <Icon type="md-school"/>
-                信息管理
+                企业信息管理
               </template>
                 <MenuItem name="EmployeeManage" to="/EmployeeManage">
                   员工

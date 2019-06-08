@@ -81,6 +81,11 @@ const router = new Router({
       component: require('@/components/Rating').default
     },
     {
+      path: '/UserQuery',
+      name: 'UserQuery',
+      component: require('@/view/UserQuery').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
