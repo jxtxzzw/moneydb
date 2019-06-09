@@ -69,7 +69,7 @@ const router = new Router({
 
 // 每一个路由之前都做一次检验，除非是登录页面或者主页，其他页面都要触发一个权限检查
 router.beforeEach(async (to, from, next) => {
-  if (to.name !== 'Login' && to.name !== 'Welcome' && to.name !== 'UserQuery') {
+  if (to.name !== 'Login' && to.name !== 'Welcome' && to.name !== 'UserQuery' && to.name !== 'Tracking') {
     Vue.http.post('http://127.0.0.1:3000/User/Auth', {
       from: from.name,
       to: to.name

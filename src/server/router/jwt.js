@@ -12,7 +12,8 @@ const jwtAuth = expressJwt({
       '/UserQuery/Query',
       '/UserQuery/Count',
       '/DispatchPair/ChangeRate',
-      '/Dispatcher/Rate'
+      '/Dispatcher/Rate',
+      '/Dispatcher/Info'
     ]
   })
 
