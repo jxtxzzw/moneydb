@@ -4,7 +4,7 @@
       
       <div v-if="isLogin">
         <Alert type="success">
-          欢迎你，工号 {{this.$store.state.Auth.user_id}}，您已经处于登录状态。
+          您已经处于登录状态。
         </Alert>
         <Tabs value="changePasswordPane">
           <TabPane label='密码修改' name='changePasswordPane'>
